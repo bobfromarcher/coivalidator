@@ -42,32 +42,32 @@
   }
   </script>
   <style>
-    body { background: #060918; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    body { background: #0A0A0A; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
+    .gradient-text { background: linear-gradient(135deg, #FFD000, #FFE135, #FFD000); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(12px); }
     .glass-hover:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
     .code-block { background: #0d1117; border: 1px solid rgba(255,255,255,0.06); }
     pre { overflow-x: auto; }
-    .glow { box-shadow: 0 0 80px rgba(99,102,241,0.12); }
-    .glow-sm { box-shadow: 0 0 30px rgba(99,102,241,0.08); }
+    .glow { box-shadow: 0 0 80px rgba(255,208,0,0.12); }
+    .glow-sm { box-shadow: 0 0 30px rgba(255,208,0,0.08); }
     .animate-pulse-slow { animation: pulse API cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    .tab-active { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.3); color: #a5b4fc; }
+    .tab-active { background: rgba(255,208,0,0.15); border-color: rgba(255,208,0,0.3); color: #FFD000; }
     .stat-ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
     details summary { cursor: pointer; list-style: none; }
     details summary::-webkit-details-marker { display: none; }
-    details summary::after { content: '+'; font-size: 18px; color: #6366f1; transition: transform 0.2s; }
+    details summary::after { content: '+'; font-size: 18px; color: #FFD000; transition: transform 0.2s; }
     details[open] summary::after { transform: rotate(45deg); }
     .demo-result { animation: fadeIn 0.4s ease-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body class="text-white antialiased">
-  <nav class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between sticky top-0 z-50 bg-[#060918]/80 backdrop-blur-lg border-b border-white/[0.04]">
+  <nav class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between sticky top-0 z-50 bg-[#0A0A0A]/80 backdrop-blur-lg border-b border-white/[0.04]">
     <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-sm font-bold">CV</div>
-      <span class="text-lg font-bold">COI Validator</span>
-      <span class="text-[10px] text-indigo-400 border border-indigo-500/30 rounded px-1.5 py-0.5 bg-indigo-500/10">API</span>
+      <div class="w-8 h-8 rounded-lg bg-yellow-400 flex items-center justify-center text-black text-sm font-black">DM</div>
+      <span class="text-lg font-bold">COI Validator</span><span class="hidden sm:inline text-xs text-gray-500">by de Montfort</span>
+      <span class="text-[10px] text-yellow-300 border border-yellow-400/30 rounded px-1.5 py-0.5 bg-yellow-400/10">API</span>
     </div>
     <div class="hidden md:flex items-center gap-6 text-sm text-gray-400">
       <a href="#features" class="hover:text-white transition-colors">Features</a>
@@ -76,14 +76,14 @@
       <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
       <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
       <a href="https://tachyontracker.com/api-product" class="hover:text-white transition-colors">Full Platform</a>
-      <a href="mailto:api@coivalidator.com?subject=API%20Access%20Request" class="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg font-medium transition-colors">Get API Key</a>
+      <a href="mailto:api@coivalidator.com?subject=API%20Access%20Request" class="bg-yellow-400 hover:bg-yellow-300 text-black px-4 py-2 rounded-lg font-medium transition-colors">Get API Key</a>
     </div>
   </nav>
 
   <main class="max-w-5xl mx-auto px-6 pt-20 pb-32">
     <div class="text-center mb-20">
-      <div class="inline-flex items-center gap-2 bg-indigo-500/10 text-indigo-400 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-indigo-500/20">
-        By de Montfort LLC — Makers of TachyonTracker
+      <div class="inline-flex items-center gap-2 bg-yellow-400/10 text-yellow-300 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-yellow-400/20">
+        A de Montfort LLC product — same compliance system as TachyonTracker
       </div>
       <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
         COI Validation<br><span class="gradient-text">as a Service</span>
@@ -97,7 +97,7 @@
         <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> TLS transport</span>
       </div>
       <div class="flex items-center justify-center gap-4 flex-wrap">
-        <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base glow-sm">
+        <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-8 py-3.5 rounded-xl transition-colors text-base glow-sm">
           Request API Key
         </a>
         <a href="#demo" class="border border-gray-700 text-gray-300 hover:text-white hover:border-gray-500 font-semibold px-8 py-3.5 rounded-xl transition-colors text-base">
@@ -112,7 +112,7 @@
         <p class="text-gray-500 text-xs">Structured response</p>
       </div>
       <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-indigo-400 mb-1">COI</p>
+        <p class="text-3xl font-extrabold text-yellow-300 mb-1">COI</p>
         <p class="text-gray-500 text-xs">Gap detection</p>
       </div>
       <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
@@ -127,17 +127,17 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
       <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">⚡</div>
+        <div class="w-10 h-10 rounded-lg bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 mb-4 text-lg font-bold">⚡</div>
         <h3 class="font-semibold mb-1.5">Structured Validation</h3>
         <p class="text-gray-500 text-sm">Send a COI and receive a 0-100 compliance score, extracted policy details, and a focused gap list for human review.</p>
       </div>
       <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">📸</div>
+        <div class="w-10 h-10 rounded-lg bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 mb-4 text-lg font-bold">📸</div>
         <h3 class="font-semibold mb-1.5">Image + Text OCR</h3>
         <p class="text-gray-500 text-sm">Upload a COI photo or paste extracted text. AI reads carrier name, policy numbers, dates, limits, and endorsements automatically.</p>
       </div>
       <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">✓</div>
+        <div class="w-10 h-10 rounded-lg bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 mb-4 text-lg font-bold">✓</div>
         <h3 class="font-semibold mb-1.5">Custom Requirements</h3>
         <p class="text-gray-500 text-sm">Define GL, WC, Auto limits and endorsement requirements per vendor. Get pass/fail per field with specific gap descriptions.</p>
       </div>
@@ -145,17 +145,17 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
       <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">🔔</div>
+        <div class="w-10 h-10 rounded-lg bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 mb-4 text-lg font-bold">🔔</div>
         <h3 class="font-semibold mb-1.5">Expiration Alerts</h3>
         <p class="text-gray-500 text-sm">Returns days-until-expiry when the model can extract policy dates. Webhook notifications are planned for tracked COI workflows.</p>
       </div>
       <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">📊</div>
+        <div class="w-10 h-10 rounded-lg bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 mb-4 text-lg font-bold">📊</div>
         <h3 class="font-semibold mb-1.5">Structured JSON</h3>
         <p class="text-gray-500 text-sm">Every response includes score, gaps, requirements_met, extracted policies, and endorsement status — ready for your database.</p>
       </div>
       <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">🔒</div>
+        <div class="w-10 h-10 rounded-lg bg-yellow-400/10 border border-yellow-400/20 flex items-center justify-center text-yellow-300 mb-4 text-lg font-bold">🔒</div>
         <h3 class="font-semibold mb-1.5">Secure by Default</h3>
         <p class="text-gray-500 text-sm">API keys with per-key usage limits, TLS transport, and a data-handling model designed to minimize document retention.</p>
       </div>
@@ -177,7 +177,7 @@
         <div class="p-5">
           <div class="mb-4">
             <label class="text-xs text-gray-500 mb-1 block">COI Document Text</label>
-            <textarea id="coiInput" rows="6" class="w-full bg-black/30 border border-white/5 rounded-lg px-4 py-3 text-sm text-gray-300 font-mono focus:border-indigo-500/50 focus:outline-none resize-y" placeholder="Paste a Certificate of Insurance here...">CERTIFICATE OF INSURANCE
+            <textarea id="coiInput" rows="6" class="w-full bg-black/30 border border-white/5 rounded-lg px-4 py-3 text-sm text-gray-300 font-mono focus:border-yellow-400/50 focus:outline-none resize-y" placeholder="Paste a Certificate of Insurance here...">CERTIFICATE OF INSURANCE
 
 PRODUCER: ABC Insurance Brokers, Inc.
 INSURED: Apex Contracting Services LLC
@@ -201,7 +201,7 @@ COVERAGES:
 
 NOTICE OF CANCELLATION: 30 DAYS written notice</textarea>
           </div>
-          <button onclick="runDemo()" id="demoBtn" class="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors text-sm flex items-center gap-2">
+          <button onclick="runDemo()" id="demoBtn" class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-6 py-2.5 rounded-lg transition-colors text-sm flex items-center gap-2">
             <span id="demoBtnText">▶ Run Validation</span>
           </button>
           <div id="demoResult" class="mt-4 hidden demo-result"></div>
@@ -273,25 +273,25 @@ const result = await response.json();
         <div class="glass rounded-xl p-6">
           <h3 class="font-semibold mb-4">Request Parameters</h3>
           <div class="space-y-2 text-sm font-mono">
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">text</span> <span class="text-gray-600">string — COI document text (required if no image)</span></div>
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">image</span> <span class="text-gray-600">string — Base64-encoded COI image (required if no text)</span></div>
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">mode</span> <span class="text-gray-600">string — "coi" (default) or "contract"</span></div>
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">requirements</span> <span class="text-gray-600">object — Custom compliance requirements to validate against</span></div>
+            <div class="flex items-start gap-3"><span class="text-yellow-300 shrink-0">text</span> <span class="text-gray-600">string — COI document text (required if no image)</span></div>
+            <div class="flex items-start gap-3"><span class="text-yellow-300 shrink-0">image</span> <span class="text-gray-600">string — Base64-encoded COI image (required if no text)</span></div>
+            <div class="flex items-start gap-3"><span class="text-yellow-300 shrink-0">mode</span> <span class="text-gray-600">string — "coi" (default) or "contract"</span></div>
+            <div class="flex items-start gap-3"><span class="text-yellow-300 shrink-0">requirements</span> <span class="text-gray-600">object — Custom compliance requirements to validate against</span></div>
           </div>
         </div>
 
         <div class="glass rounded-xl p-6">
           <h3 class="font-semibold mb-4">Response Fields</h3>
           <div class="space-y-2 text-sm font-mono">
-            <div><span class="text-indigo-400">validation.score</span> <span class="text-gray-600">integer 0-100 — Overall compliance score</span></div>
-            <div><span class="text-indigo-400">validation.gaps</span> <span class="text-gray-600">string[] — List of compliance gaps found</span></div>
-            <div><span class="text-indigo-400">validation.requirements_met</span> <span class="text-gray-600">object — Pass/fail per requirement</span></div>
-            <div><span class="text-indigo-400">validation.policies</span> <span class="text-gray-600">object[] — Extracted policy details</span></div>
-            <div><span class="text-indigo-400">validation.additional_insured</span> <span class="text-gray-600">boolean</span></div>
-            <div><span class="text-indigo-400">validation.waiver_of_subrogation</span> <span class="text-gray-600">boolean</span></div>
-            <div><span class="text-indigo-400">validation.expires_in_days</span> <span class="text-gray-600">integer | null</span></div>
-            <div><span class="text-indigo-400">analysis.summary</span> <span class="text-gray-600">string — Plain English summary</span></div>
-            <div><span class="text-indigo-400">usage.used / usage.limit</span> <span class="text-gray-600">integer — Monthly usage tracking</span></div>
+            <div><span class="text-yellow-300">validation.score</span> <span class="text-gray-600">integer 0-100 — Overall compliance score</span></div>
+            <div><span class="text-yellow-300">validation.gaps</span> <span class="text-gray-600">string[] — List of compliance gaps found</span></div>
+            <div><span class="text-yellow-300">validation.requirements_met</span> <span class="text-gray-600">object — Pass/fail per requirement</span></div>
+            <div><span class="text-yellow-300">validation.policies</span> <span class="text-gray-600">object[] — Extracted policy details</span></div>
+            <div><span class="text-yellow-300">validation.additional_insured</span> <span class="text-gray-600">boolean</span></div>
+            <div><span class="text-yellow-300">validation.waiver_of_subrogation</span> <span class="text-gray-600">boolean</span></div>
+            <div><span class="text-yellow-300">validation.expires_in_days</span> <span class="text-gray-600">integer | null</span></div>
+            <div><span class="text-yellow-300">analysis.summary</span> <span class="text-gray-600">string — Plain English summary</span></div>
+            <div><span class="text-yellow-300">usage.used / usage.limit</span> <span class="text-gray-600">integer — Monthly usage tracking</span></div>
           </div>
         </div>
 
@@ -355,10 +355,10 @@ const result = await response.json();
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Structured JSON output</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 1 API key</li>
           </ul>
-          <a href="mailto:api@coivalidator.com?subject=Starter%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20~500" class="block text-center border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 px-4 py-2.5 rounded-lg font-medium transition-colors text-sm">Get Started</a>
+          <a href="mailto:api@coivalidator.com?subject=Starter%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20~500" class="block text-center border border-yellow-400/30 text-yellow-300 hover:bg-yellow-400/10 px-4 py-2.5 rounded-lg font-medium transition-colors text-sm">Get Started</a>
         </div>
-        <div class="glass rounded-2xl p-6 border-indigo-500/30 bg-indigo-500/[0.03] glow-sm">
-          <div class="text-xs text-indigo-400 font-semibold mb-3">MOST POPULAR</div>
+        <div class="glass rounded-2xl p-6 border-yellow-400/30 bg-yellow-400/[0.03] glow-sm">
+          <div class="text-xs text-yellow-300 font-semibold mb-3">MOST POPULAR</div>
           <h3 class="text-lg font-semibold mb-1">Pro</h3>
           <p class="text-gray-500 text-xs mb-4">Higher monthly volume</p>
           <p class="text-3xl font-extrabold text-white mb-1">Contact</p>
@@ -370,7 +370,7 @@ const result = await response.json();
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Priority support</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Batch endpoint (coming soon)</li>
           </ul>
-          <a href="mailto:api@coivalidator.com?subject=Pro%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20~2000" class="block text-center bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors text-sm">Get Started</a>
+          <a href="mailto:api@coivalidator.com?subject=Pro%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20~2000" class="block text-center bg-yellow-400 hover:bg-yellow-300 text-black px-4 py-2.5 rounded-lg font-semibold transition-colors text-sm">Get Started</a>
         </div>
         <div class="glass rounded-2xl p-6 glass-hover transition-all">
           <h3 class="text-lg font-semibold mb-1">Enterprise</h3>
@@ -384,7 +384,7 @@ const result = await response.json();
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> White-label planning</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Dedicated support</li>
           </ul>
-          <a href="mailto:api@coivalidator.com?subject=Enterprise%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20%0AIntegration%20details%3A%20" class="block text-center border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 px-4 py-2.5 rounded-lg font-medium transition-colors text-sm">Contact Us</a>
+          <a href="mailto:api@coivalidator.com?subject=Enterprise%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20%0AIntegration%20details%3A%20" class="block text-center border border-yellow-400/30 text-yellow-300 hover:bg-yellow-400/10 px-4 py-2.5 rounded-lg font-medium transition-colors text-sm">Contact Us</a>
         </div>
       </div>
       <p class="text-center text-gray-600 text-xs mt-6">Contact us to confirm overage pricing, annual billing, and current plan limits. All plans include TLS transport and rate limiting.</p>
@@ -428,13 +428,13 @@ const result = await response.json();
           <tbody class="text-gray-400">
             <tr class="border-b border-white/[0.03]">
               <td class="py-3 pr-4">Pricing model</td>
-              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">Usage–0.10</td>
+              <td class="py-3 pr-4 text-center text-yellow-300 font-semibold">Usage–0.10</td>
               <td class="py-3 pr-4 text-center">Team labor</td>
               <td class="py-3 text-center">Vendor-specific</td>
             </tr>
             <tr class="border-b border-white/[0.03]">
               <td class="py-3 pr-4">Response time</td>
-              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">API call</td>
+              <td class="py-3 pr-4 text-center text-yellow-300 font-semibold">API call</td>
               <td class="py-3 pr-4 text-center">Manual workflow</td>
               <td class="py-3 text-center">Configured workflow</td>
             </tr>
@@ -501,7 +501,7 @@ const result = await response.json();
       <h2 class="text-2xl font-bold mb-3">Ready to automate COI verification?</h2>
       <p class="text-gray-400 mb-6">Request an API key and test Certificate of Insurance validation against your workflow.</p>
       <div class="flex items-center justify-center gap-4 flex-wrap">
-        <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base">
+        <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-8 py-3.5 rounded-xl transition-colors text-base">
           Request API Key
         </a>
         <a href="https://tachyontracker.com/scan" class="border border-gray-700 text-gray-300 hover:text-white font-semibold px-8 py-3.5 rounded-xl transition-colors text-base">
@@ -626,7 +626,7 @@ const result = await response.json();
 
         let policiesHtml = '';
         if (policies.length > 0) {
-          policiesHtml = `<div class="mt-4 pt-3 border-t border-white/5"><p class="text-xs text-gray-500 mb-2">Extracted Policies:</p><div class="space-y-1">${policies.map(p => `<div class="text-xs text-gray-400 flex items-center gap-2"><span class="text-indigo-400">${p.type || 'Policy'}</span>${p.policy_number ? `<span class="text-gray-600">${p.policy_number}</span>` : ''}${p.expiration ? `<span class="text-gray-600">Exp: ${p.expiration}</span>` : ''}</div>`).join('')}</div></div>`;
+          policiesHtml = `<div class="mt-4 pt-3 border-t border-white/5"><p class="text-xs text-gray-500 mb-2">Extracted Policies:</p><div class="space-y-1">${policies.map(p => `<div class="text-xs text-gray-400 flex items-center gap-2"><span class="text-yellow-300">${p.type || 'Policy'}</span>${p.policy_number ? `<span class="text-gray-600">${p.policy_number}</span>` : ''}${p.expiration ? `<span class="text-gray-600">Exp: ${p.expiration}</span>` : ''}</div>`).join('')}</div></div>`;
         }
 
         let reqsHtml = '';
@@ -638,7 +638,7 @@ const result = await response.json();
           }).join('')}</div>`;
         }
 
-        const demoNote = data.demo ? `<p class="text-indigo-400 text-xs mt-2">${data.message || 'Demo mode'}</p>` : '';
+        const demoNote = data.demo ? `<p class="text-yellow-300 text-xs mt-2">${data.message || 'Demo mode'}</p>` : '';
 
         result.innerHTML = `
           <div class="border border-white/5 rounded-xl p-4 bg-black/20 demo-result">
@@ -655,7 +655,7 @@ const result = await response.json();
             ${reqsHtml}
             ${policiesHtml}
             <div class="mt-3 pt-3 border-t border-white/5 text-xs text-gray-600">
-              AI-validated · <a href="mailto:api@coivalidator.com?subject=API%20Access%20Request" class="text-indigo-400 hover:text-indigo-300">Get your API key →</a>
+              AI-validated · <a href="mailto:api@coivalidator.com?subject=API%20Access%20Request" class="text-yellow-300 hover:text-yellow-200">Get your API key →</a>
             </div>
             ${demoNote}
           </div>
