@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>COI Validator API — Automate Certificate of Insurance Verification | coivalidator.com</title>
-  <meta name="description" content="REST API for automated COI validation, OCR extraction, and compliance scoring. Send a COI image or text, get a score, gaps, and policy extraction in under 3 seconds. Start at $49/mo.">
+  <meta name="description" content="REST API for COI validation, OCR extraction, and compliance scoring. Send a COI image or text, then get a structured score, gaps, and policy extraction.">
   <meta property="og:title" content="COI Validator API — Automate Certificate of Insurance Verification">
-  <meta property="og:description" content="REST API for automated Certificate of Insurance validation. Send a COI, get a compliance score and gap analysis in 3 seconds.">
+  <meta property="og:description" content="REST API for Certificate of Insurance validation. Send a COI, then get a structured compliance score and gap analysis.">
   <meta property="og:url" content="https://coivalidator.com">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="COI Validator API — Insurance Verification as a Service">
-  <meta name="twitter:description" content="REST API for automated COI validation, OCR extraction, and compliance scoring. $49/mo for 500 validations.">
+  <meta name="twitter:description" content="REST API for COI validation, OCR extraction, and compliance scoring.">
   <link rel="canonical" href="https://coivalidator.com">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -22,11 +22,7 @@
     "name": "COI Validator API",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
-    "offers": [
-      { "@type": "Offer", "price": "49", "priceCurrency": "USD", "description": "500 validations/month" },
-      { "@type": "Offer", "price": "149", "priceCurrency": "USD", "description": "2,000 validations/month" },
-      { "@type": "Offer", "price": "399", "priceCurrency": "USD", "description": "10,000 validations/month" }
-    ],
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "description": "Contact for current API access and pricing." },
     "description": "REST API for automated Certificate of Insurance validation, OCR extraction, and compliance scoring.",
     "url": "https://coivalidator.com",
     "provider": { "@type": "Organization", "name": "de Montfort LLC", "url": "https://tachyontracker.com" }
@@ -38,10 +34,10 @@
     "@type": "FAQPage",
     "mainEntity": [
       { "@type": "Question", "name": "What file formats does the COI Validator API accept?", "acceptedAnswer": { "@type": "Answer", "text": "The API accepts base64-encoded images (PNG, JPG), raw COI text, and PDF documents. You can also pass extracted text from your own OCR pipeline." } },
-      { "@type": "Question", "name": "How fast is the API response?", "acceptedAnswer": { "@type": "Answer", "text": "Average response time is 2-4 seconds for text validation and 3-6 seconds for image OCR + validation. The AI model processes each COI individually for maximum accuracy." } },
+      { "@type": "Question", "name": "How fast is the API response?", "acceptedAnswer": { "@type": "Answer", "text": "Structured response is 2-4 seconds for text validation and 3-6 seconds for image OCR + validation. The AI model processes each COI individually for maximum accuracy." } },
       { "@type": "Question", "name": "Can I customize the compliance requirements?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pass a requirements object with your specific GL per-occurrence/aggregate limits, WC statutory requirements, auto liability minimums, and endorsement requirements (Additional Insured, Waiver of Subrogation, 30-day cancellation, Primary & Non-Contributory)." } },
-      { "@type": "Question", "name": "Is there a free tier or trial?", "acceptedAnswer": { "@type": "Answer", "text": "You can test the API with 5 free scans at tachyontracker.com/scan. For API access, the Starter plan at $49/mo includes 500 validations. Contact us for a test key." } },
-      { "@type": "Question", "name": "How does the API compare to manual COI review?", "acceptedAnswer": { "@type": "Answer", "text": "Manual COI review takes 15-20 minutes per document and misses 60% of errors. The COI Validator API checks coverage limits, endorsements, expiration dates, and compliance gaps in under 5 seconds with higher accuracy." } }
+      { "@type": "Question", "name": "Is there a free tier or trial?", "acceptedAnswer": { "@type": "Answer", "text": "You can test the scanner at tachyontracker.com/scan. Contact us for current API access, plan limits, and pricing." } },
+      { "@type": "Question", "name": "How does the API compare to manual COI review?", "acceptedAnswer": { "@type": "Answer", "text": "The API checks coverage limits, endorsements, expiration dates, and compliance gaps with a consistent JSON response for human review." } }
     ]
   }
   </script>
@@ -54,7 +50,7 @@
     pre { overflow-x: auto; }
     .glow { box-shadow: 0 0 80px rgba(99,102,241,0.12); }
     .glow-sm { box-shadow: 0 0 30px rgba(99,102,241,0.08); }
-    .animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    .animate-pulse-slow { animation: pulse API cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     .tab-active { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.3); color: #a5b4fc; }
     .stat-ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -93,12 +89,12 @@
         COI Validation<br><span class="gradient-text">as a Service</span>
       </h1>
       <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-4">
-        Send a Certificate of Insurance image or text. Get a compliance score, gap analysis, and policy extraction — in under 3 seconds. Built for platforms that verify vendor insurance at scale.
+        Send a Certificate of Insurance image or text. Get a structured compliance score, gap analysis, and policy extraction for vendor-insurance workflows.
       </p>
       <div class="flex items-center justify-center gap-6 text-sm text-gray-500 mb-10">
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> 99.9% uptime</span>
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> SOC 2 compliant</span>
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> 256-bit encryption</span>
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> Cloudflare edge API</span>
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> Security roadmap</span>
+        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> TLS transport</span>
       </div>
       <div class="flex items-center justify-center gap-4 flex-wrap">
         <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base glow-sm">
@@ -112,28 +108,28 @@
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20" id="features">
       <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-white mb-1">3s</p>
-        <p class="text-gray-500 text-xs">Average response time</p>
+        <p class="text-3xl font-extrabold text-white mb-1">API</p>
+        <p class="text-gray-500 text-xs">Structured response</p>
       </div>
       <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-indigo-400 mb-1">60%</p>
-        <p class="text-gray-500 text-xs">COIs have errors we catch</p>
+        <p class="text-3xl font-extrabold text-indigo-400 mb-1">COI</p>
+        <p class="text-gray-500 text-xs">Gap detection</p>
       </div>
       <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-white mb-1">10K</p>
-        <p class="text-gray-500 text-xs">Validations per month</p>
+        <p class="text-3xl font-extrabold text-white mb-1">Custom</p>
+        <p class="text-gray-500 text-xs">Monthly volume</p>
       </div>
       <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-white mb-1">$0.04</p>
-        <p class="text-gray-500 text-xs">Per validation at scale</p>
+        <p class="text-3xl font-extrabold text-white mb-1">Usage</p>
+        <p class="text-gray-500 text-xs">Plan-based pricing</p>
       </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
       <div class="glass rounded-xl p-6 glass-hover transition-all">
         <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">⚡</div>
-        <h3 class="font-semibold mb-1.5">Instant Validation</h3>
-        <p class="text-gray-500 text-sm">Send a COI, get a 0-100 compliance score and detailed gap list. No manual review needed — AI checks every field.</p>
+        <h3 class="font-semibold mb-1.5">Structured Validation</h3>
+        <p class="text-gray-500 text-sm">Send a COI and receive a 0-100 compliance score, extracted policy details, and a focused gap list for human review.</p>
       </div>
       <div class="glass rounded-xl p-6 glass-hover transition-all">
         <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">📸</div>
@@ -151,7 +147,7 @@
       <div class="glass rounded-xl p-6 glass-hover transition-all">
         <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">🔔</div>
         <h3 class="font-semibold mb-1.5">Expiration Alerts</h3>
-        <p class="text-gray-500 text-sm">Returns days-until-expiry for every policy. Webhook alerts when COIs expire — never caught with an uninsured contractor.</p>
+        <p class="text-gray-500 text-sm">Returns days-until-expiry when the model can extract policy dates. Webhook notifications are planned for tracked COI workflows.</p>
       </div>
       <div class="glass rounded-xl p-6 glass-hover transition-all">
         <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">📊</div>
@@ -161,7 +157,7 @@
       <div class="glass rounded-xl p-6 glass-hover transition-all">
         <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">🔒</div>
         <h3 class="font-semibold mb-1.5">Secure by Default</h3>
-        <p class="text-gray-500 text-sm">API keys with per-key usage limits. TLS 1.3. Documents processed in memory only — never stored. SOC 2 compliant infrastructure.</p>
+        <p class="text-gray-500 text-sm">API keys with per-key usage limits, TLS transport, and a data-handling model designed to minimize document retention.</p>
       </div>
     </div>
 
@@ -318,17 +314,17 @@ const result = await response.json();
         <div class="glass rounded-xl p-6">
           <h3 class="font-semibold mb-4">Rate Limits</h3>
           <div class="space-y-2 text-sm text-gray-400">
-            <div class="flex justify-between"><span>Starter plan</span><span class="font-mono text-gray-500">10 req/min, 500/mo</span></div>
-            <div class="flex justify-between"><span>Pro plan</span><span class="font-mono text-gray-500">30 req/min, 2,000/mo</span></div>
-            <div class="flex justify-between"><span>Enterprise plan</span><span class="font-mono text-gray-500">60 req/min, 10,000/mo</span></div>
+            <div class="flex justify-between"><span>Starter plan</span><span class="font-mono text-gray-500">Contact us</span></div>
+            <div class="flex justify-between"><span>Pro plan</span><span class="font-mono text-gray-500">Contact us</span></div>
+            <div class="flex justify-between"><span>Enterprise plan</span><span class="font-mono text-gray-500">Custom</span></div>
           </div>
-          <p class="text-gray-600 text-xs mt-3">Rate limit headers are included in every response: X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset. Exceeding limits returns HTTP 429 with a Retry-After header.</p>
+          <p class="text-gray-600 text-xs mt-3">Exceeding plan or abuse limits returns HTTP 429. Additional rate-limit headers can be added as the API contract matures.</p>
         </div>
 
         <div class="glass rounded-xl p-6">
-          <h3 class="font-semibold mb-4">Webhook: COI Expiration Alerts (Pro+)</h3>
+          <h3 class="font-semibold mb-4">Planned: COI Expiration Alerts</h3>
           <div class="space-y-2 text-sm text-gray-400">
-            <p>Configure a webhook URL in your dashboard to receive POST notifications when tracked COIs approach expiration. Webhooks fire at 60, 30, and 7 days before expiry.</p>
+            <p>The API response includes expiration fields today. Tracked COI webhooks are planned for customers who need automated 60/30/7-day notifications.</p>
           </div>
           <pre class="mt-3 p-3 bg-black/30 rounded-lg text-xs text-gray-500 font-mono overflow-x-auto"><code>// Webhook payload (POST to your URL)
 {
@@ -350,9 +346,9 @@ const result = await response.json();
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="glass rounded-2xl p-6 glass-hover transition-all">
           <h3 class="text-lg font-semibold mb-1">Starter</h3>
-          <p class="text-gray-500 text-xs mb-4">500 validations/month</p>
-          <p class="text-3xl font-extrabold text-white mb-1">$49<span class="text-sm font-normal text-gray-500">/mo</span></p>
-          <p class="text-gray-600 text-xs mb-6">$0.10/validation</p>
+          <p class="text-gray-500 text-xs mb-4">Starter API access</p>
+          <p class="text-3xl font-extrabold text-white mb-1">Contact</p>
+          <p class="text-gray-600 text-xs mb-6">Plan-based usage</p>
           <ul class="space-y-2 text-sm text-gray-400 mb-6">
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Image OCR included</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Custom requirements</li>
@@ -364,12 +360,12 @@ const result = await response.json();
         <div class="glass rounded-2xl p-6 border-indigo-500/30 bg-indigo-500/[0.03] glow-sm">
           <div class="text-xs text-indigo-400 font-semibold mb-3">MOST POPULAR</div>
           <h3 class="text-lg font-semibold mb-1">Pro</h3>
-          <p class="text-gray-500 text-xs mb-4">2,000 validations/month</p>
-          <p class="text-3xl font-extrabold text-white mb-1">$149<span class="text-sm font-normal text-gray-500">/mo</span></p>
-          <p class="text-gray-600 text-xs mb-6">$0.07/validation</p>
+          <p class="text-gray-500 text-xs mb-4">Higher monthly volume</p>
+          <p class="text-3xl font-extrabold text-white mb-1">Contact</p>
+          <p class="text-gray-600 text-xs mb-6">Higher monthly volume</p>
           <ul class="space-y-2 text-sm text-gray-400 mb-6">
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Everything in Starter</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Expiration webhooks</li>
+            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Expiration webhook planning</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 3 API keys</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Priority support</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Batch endpoint (coming soon)</li>
@@ -378,20 +374,20 @@ const result = await response.json();
         </div>
         <div class="glass rounded-2xl p-6 glass-hover transition-all">
           <h3 class="text-lg font-semibold mb-1">Enterprise</h3>
-          <p class="text-gray-500 text-xs mb-4">10,000 validations/month</p>
-          <p class="text-3xl font-extrabold text-white mb-1">$399<span class="text-sm font-normal text-gray-500">/mo</span></p>
-          <p class="text-gray-600 text-xs mb-6">$0.04/validation</p>
+          <p class="text-gray-500 text-xs mb-4">Custom API volume</p>
+          <p class="text-3xl font-extrabold text-white mb-1">Custom</p>
+          <p class="text-gray-600 text-xs mb-6">Usage/validation</p>
           <ul class="space-y-2 text-sm text-gray-400 mb-6">
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Everything in Pro</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 25 API keys</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Custom SLA</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> White-label options</li>
+            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Custom API keys</li>
+            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Custom support plan</li>
+            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> White-label planning</li>
             <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Dedicated support</li>
           </ul>
           <a href="mailto:api@coivalidator.com?subject=Enterprise%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20%0AIntegration%20details%3A%20" class="block text-center border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 px-4 py-2.5 rounded-lg font-medium transition-colors text-sm">Contact Us</a>
         </div>
       </div>
-      <p class="text-center text-gray-600 text-xs mt-6">Overage: $0.10/validation beyond plan limit · Annual billing: 20% discount · All plans include TLS 1.3, rate limiting, and audit logging</p>
+      <p class="text-center text-gray-600 text-xs mt-6">Contact us to confirm overage pricing, annual billing, and current plan limits. All plans include TLS transport and rate limiting.</p>
     </div>
 
     <div class="glass rounded-2xl p-8 mb-20">
@@ -431,16 +427,16 @@ const result = await response.json();
           </thead>
           <tbody class="text-gray-400">
             <tr class="border-b border-white/[0.03]">
-              <td class="py-3 pr-4">Cost per validation</td>
-              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">$0.04–0.10</td>
-              <td class="py-3 pr-4 text-center">$15–25 (labor)</td>
-              <td class="py-3 text-center">$1,500+/yr + contractor fees</td>
+              <td class="py-3 pr-4">Pricing model</td>
+              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">Usage–0.10</td>
+              <td class="py-3 pr-4 text-center">Team labor</td>
+              <td class="py-3 text-center">Vendor-specific</td>
             </tr>
             <tr class="border-b border-white/[0.03]">
               <td class="py-3 pr-4">Response time</td>
-              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">3 seconds</td>
-              <td class="py-3 pr-4 text-center">15–20 minutes</td>
-              <td class="py-3 text-center">1–3 business days</td>
+              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">API call</td>
+              <td class="py-3 pr-4 text-center">Manual workflow</td>
+              <td class="py-3 text-center">Configured workflow</td>
             </tr>
             <tr class="border-b border-white/[0.03]">
               <td class="py-3 pr-4">API integration</td>
@@ -464,7 +460,7 @@ const result = await response.json();
               <td class="py-3 pr-4">Contractor pays</td>
               <td class="py-3 pr-4 text-center text-green-400">No</td>
               <td class="py-3 pr-4 text-center text-green-400">No</td>
-              <td class="py-3 text-center text-red-400">Yes ($200+/yr)</td>
+              <td class="py-3 text-center text-red-400">Varies</td>
             </tr>
           </tbody>
         </table>
@@ -480,7 +476,7 @@ const result = await response.json();
         </details>
         <details class="glass rounded-xl p-5">
           <summary class="font-semibold text-sm flex items-center justify-between">How fast is the API response?</summary>
-          <p class="text-gray-400 text-sm mt-3">Average response time is 2-4 seconds for text validation and 3-6 seconds for image OCR + validation. The AI model processes each COI individually for maximum accuracy.</p>
+          <p class="text-gray-400 text-sm mt-3">Structured response is 2-4 seconds for text validation and 3-6 seconds for image OCR + validation. The AI model processes each COI individually for maximum accuracy.</p>
         </details>
         <details class="glass rounded-xl p-5">
           <summary class="font-semibold text-sm flex items-center justify-between">Can I customize the compliance requirements?</summary>
@@ -488,22 +484,22 @@ const result = await response.json();
         </details>
         <details class="glass rounded-xl p-5">
           <summary class="font-semibold text-sm flex items-center justify-between">Is there a free tier or trial?</summary>
-          <p class="text-gray-400 text-sm mt-3">You can test the scanner free at tachyontracker.com/scan (5 scans/month). For API access, the Starter plan at $49/mo includes 500 validations. Contact us for a test key.</p>
+          <p class="text-gray-400 text-sm mt-3">You can test the scanner at tachyontracker.com/scan. Contact us for current API access, plan limits, and pricing.</p>
         </details>
         <details class="glass rounded-xl p-5">
           <summary class="font-semibold text-sm flex items-center justify-between">How does the API compare to manual COI review?</summary>
-          <p class="text-gray-400 text-sm mt-3">Manual COI review takes 15-20 minutes per document and misses 60% of errors. The COI Validator API checks coverage limits, endorsements, expiration dates, and compliance gaps in under 5 seconds with higher accuracy.</p>
+          <p class="text-gray-400 text-sm mt-3">The API checks coverage limits, endorsements, expiration dates, and compliance gaps with a consistent JSON response for human review.</p>
         </details>
         <details class="glass rounded-xl p-5">
           <summary class="font-semibold text-sm flex items-center justify-between">What about data privacy and security?</summary>
-          <p class="text-gray-400 text-sm mt-3">Documents are processed in memory only and never stored. All API calls use TLS 1.3 encryption. API keys are hashed, and usage is tracked per-key. Infrastructure is SOC 2 compliant with 256-bit encryption at rest.</p>
+          <p class="text-gray-400 text-sm mt-3">API calls use TLS transport. The service is designed to minimize document retention, hash API keys, and track usage per key. Formal compliance certifications should be confirmed before regulated production rollout.</p>
         </details>
       </div>
     </div>
 
     <div class="text-center glass rounded-2xl p-10 glow">
       <h2 class="text-2xl font-bold mb-3">Ready to automate COI verification?</h2>
-      <p class="text-gray-400 mb-6">Get an API key and start validating Certificates of Insurance in minutes.</p>
+      <p class="text-gray-400 mb-6">Request an API key and test Certificate of Insurance validation against your workflow.</p>
       <div class="flex items-center justify-center gap-4 flex-wrap">
         <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base">
           Request API Key
@@ -512,7 +508,7 @@ const result = await response.json();
           Try Free Scanner
         </a>
       </div>
-      <p class="text-gray-600 text-xs mt-4">Starter: $49/mo (500 validations) · Pro: $149/mo (2,000) · Enterprise: $399/mo (10,000)</p>
+      <p class="text-gray-600 text-xs mt-4">Contact us to confirm current plan limits, pricing, and onboarding requirements.</p>
     </div>
 
     <div id="privacy" class="mb-20">
@@ -521,15 +517,15 @@ const result = await response.json();
         <p><span class="text-white font-medium">Effective Date:</span> January 1, 2026</p>
         <p>COI Validator API is operated by de Montfort LLC. This policy describes how we handle your data when you use our API service and website.</p>
         <h3 class="text-white font-semibold pt-2">Data We Process</h3>
-        <p>When you submit a COI for validation, the document text or image is sent to our AI processing pipeline. Documents are processed in memory only and are never stored on our servers, in our databases, or in logs. We do not retain, archive, or cache any submitted COI content after the validation response is returned.</p>
+        <p>When you submit a COI for validation, the document text or image is sent to our AI processing pipeline. The service is designed to process submitted document text or images transiently and avoid long-term COI content storage. Confirm the current data flow before using regulated or sensitive production documents.</p>
         <h3 class="text-white font-semibold pt-2">API Key Data</h3>
         <p>API keys are stored as SHA-256 hashes. Your usage count and last-used timestamp are tracked per key for billing and rate limiting. We do not track or store the content of your API requests beyond transient processing.</p>
         <h3 class="text-white font-semibold pt-2">Analytics</h3>
         <p>We track aggregate request counts, error rates, and latency metrics for service monitoring. No personally identifiable information is collected in analytics. We do not use cookies or third-party tracking scripts on this website.</p>
         <h3 class="text-white font-semibold pt-2">Third Parties</h3>
-        <p>COI text is processed by our AI provider (OpenRouter/Google) under their data processing agreement. OpenRouter does not use submitted content for model training. No other third parties receive your data.</p>
+        <p>COI text is processed by our AI provider (OpenRouter/Google) under their data processing agreement. AI-provider handling is governed by the active provider terms and account settings. Confirm current provider retention and training settings before sending regulated or sensitive production documents.</p>
         <h3 class="text-white font-semibold pt-2">Security</h3>
-        <p>All API traffic uses TLS 1.3 encryption. Infrastructure is hosted on Cloudflare with SOC 2 Type II compliance. API keys are hashed at rest. We maintain audit logs of API authentication events.</p>
+        <p>All API traffic uses TLS transport. Infrastructure is hosted on Cloudflare. API keys are hashed at rest, and usage metadata is tracked per key for billing and abuse prevention.</p>
         <h3 class="text-white font-semibold pt-2">Your Rights</h3>
         <p>You may request deletion of your API key data at any time by contacting api@coivalidator.com. Since we do not store COI content, no document deletion is necessary.</p>
         <h3 class="text-white font-semibold pt-2">Contact</h3>
