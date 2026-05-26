@@ -1,0 +1,10 @@
+{
+  "name": "coivalidator-site",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 3000",
+    "build": "node -e \"require('fs').mkdirSync('dist',{recursive:true}); for (const f of ['index.html','robots.txt','sitemap.xml','favicon.svg','tachyontracker2026.txt']) if (require('fs').existsSync(f)) require('fs').copyFileSync(f, 'dist/'+f)\""
+  }
+}

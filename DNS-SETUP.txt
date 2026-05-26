@@ -1,0 +1,45 @@
+COIVALIDATOR.COM — DNS SETUP INSTRUCTIONS
+=========================================
+
+DOMAIN: coivalidator.com
+REGISTRAR: Namecheap (dns1/dns2.registrar-servers.com)
+HOSTING: Cloudflare Pages (coivalidator.pages.dev)
+
+CUSTOM DOMAIN STATUS: Added to Cloudflare Pages, pending DNS verification
+
+REQUIRED DNS RECORDS AT NAMECHEAP:
+  Type: CNAME
+  Host: @
+  Value: coivalidator.pages.dev
+  TTL: Automatic
+
+  Type: CNAME
+  Host: www
+  Value: coivalidator.pages.dev
+  TTL: Automatic
+
+ALTERNATIVE (if Namecheap doesn't allow CNAME on @):
+  Use URL redirect for @ → www.coivalidator.com
+  Then CNAME www → coivalidator.pages.dev
+
+STEPS:
+1. Log into Namecheap dashboard
+2. Go to Domain List → Manage → Advanced DNS
+3. Add CNAME record: Host = @, Value = coivalidator.pages.dev
+4. Add CNAME record: Host = www, Value = coivalidator.pages.dev
+5. Wait 5-30 minutes for propagation
+6. Cloudflare will auto-provision SSL certificate (Google CA)
+7. Verify at https://coivalidator.com
+
+NOTE: The custom domain was already added to Cloudflare Pages via API:
+  Domain: coivalidator.com
+  Status: pending (waiting for DNS)
+  Project: coivalidator
+  Account: b88fd76e5704ac91bc2a77f13a5d4135
+
+VERIFICATION COMMAND:
+  nslookup coivalidator.com
+  Should resolve to Cloudflare Pages IPs eventually
+
+CURRENT SITE (works now):
+  https://coivalidator.pages.dev
