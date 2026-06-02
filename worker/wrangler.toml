@@ -1,0 +1,10 @@
+name = "coivalidator-api"
+main = "index.js"
+compatibility_date = "2024-09-23"
+account_id = "b88fd76e5704ac91bc2a77f13a5d4135"
+workers_dev = true
+
+[vars]
+FIREWORKS_MODEL = "accounts/fireworks/models/gpt-oss-120b"
+FIREWORKS_VISION_MODEL = "accounts/fireworks/models/kimi-k2p6"
+FIREWORKS_BASE_URL = "https://api.fireworks.ai/inference/v1"
