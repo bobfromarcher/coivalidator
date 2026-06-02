@@ -1,690 +1,442 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>COI Validator API — Automate Certificate of Insurance Verification | coivalidator.com</title>
-  <meta name="description" content="REST API for automated COI validation, OCR extraction, and compliance scoring. Send a COI image or text, get a score, gaps, and policy extraction in under 3 seconds. Start at $49/mo.">
-  <meta property="og:title" content="COI Validator API — Automate Certificate of Insurance Verification">
-  <meta property="og:description" content="REST API for automated Certificate of Insurance validation. Send a COI, get a compliance score and gap analysis in 3 seconds.">
-  <meta property="og:url" content="https://coivalidator.com">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="COI Validator API — Insurance Verification as a Service">
-  <meta name="twitter:description" content="REST API for automated COI validation, OCR extraction, and compliance scoring. $49/mo for 500 validations.">
-  <link rel="canonical" href="https://coivalidator.com">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "COI Validator API",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Any",
-    "offers": [
-      { "@type": "Offer", "price": "49", "priceCurrency": "USD", "description": "500 validations/month" },
-      { "@type": "Offer", "price": "149", "priceCurrency": "USD", "description": "2,000 validations/month" },
-      { "@type": "Offer", "price": "399", "priceCurrency": "USD", "description": "10,000 validations/month" }
-    ],
-    "description": "REST API for automated Certificate of Insurance validation, OCR extraction, and compliance scoring.",
-    "url": "https://coivalidator.com",
-    "provider": { "@type": "Organization", "name": "de Montfort LLC", "url": "https://tachyontracker.com" }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "What file formats does the COI Validator API accept?", "acceptedAnswer": { "@type": "Answer", "text": "The API accepts base64-encoded images (PNG, JPG), raw COI text, and PDF documents. You can also pass extracted text from your own OCR pipeline." } },
-      { "@type": "Question", "name": "How fast is the API response?", "acceptedAnswer": { "@type": "Answer", "text": "Average response time is 2-4 seconds for text validation and 3-6 seconds for image OCR + validation. The AI model processes each COI individually for maximum accuracy." } },
-      { "@type": "Question", "name": "Can I customize the compliance requirements?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Pass a requirements object with your specific GL per-occurrence/aggregate limits, WC statutory requirements, auto liability minimums, and endorsement requirements (Additional Insured, Waiver of Subrogation, 30-day cancellation, Primary & Non-Contributory)." } },
-      { "@type": "Question", "name": "Is there a free tier or trial?", "acceptedAnswer": { "@type": "Answer", "text": "You can test the API with 5 free scans at tachyontracker.com/scan. For API access, the Starter plan at $49/mo includes 500 validations. Contact us for a test key." } },
-      { "@type": "Question", "name": "How does the API compare to manual COI review?", "acceptedAnswer": { "@type": "Answer", "text": "Manual COI review takes 15-20 minutes per document and misses 60% of errors. The COI Validator API checks coverage limits, endorsements, expiration dates, and compliance gaps in under 5 seconds with higher accuracy." } }
-    ]
-  }
-  </script>
-  <style>
-    body { background: #060918; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; }
-    .gradient-text { background: linear-gradient(135deg, #6366f1, #8b5cf6, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .glass { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(12px); }
-    .glass-hover:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
-    .code-block { background: #0d1117; border: 1px solid rgba(255,255,255,0.06); }
-    pre { overflow-x: auto; }
-    .glow { box-shadow: 0 0 80px rgba(99,102,241,0.12); }
-    .glow-sm { box-shadow: 0 0 30px rgba(99,102,241,0.08); }
-    .animate-pulse-slow { animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    .tab-active { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.3); color: #a5b4fc; }
-    .stat-ring { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    details summary { cursor: pointer; list-style: none; }
-    details summary::-webkit-details-marker { display: none; }
-    details summary::after { content: '+'; font-size: 18px; color: #6366f1; transition: transform 0.2s; }
-    details[open] summary::after { transform: rotate(45deg); }
-    .demo-result { animation: fadeIn 0.4s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>COI Validator — Check a Certificate of Insurance in 10 seconds</title>
+<meta name="description" content="Upload a Certificate of Insurance (PDF or photo) and instantly see if it meets your requirements: coverage limits, Additional Insured, Waiver of Subrogation, expiration dates. Free to try, no signup." />
+<meta name="theme-color" content="#0b1220" />
+<link rel="canonical" href="https://coivalidator.com/" />
+<meta property="og:title" content="COI Validator — Check a Certificate of Insurance in 10 seconds" />
+<meta property="og:description" content="Drop a COI. Get a plain-English compliance verdict an insurance pro would trust. Free to try." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://coivalidator.com/" />
+<link rel="preconnect" href="https://coivalidator-api.tachyontracker.workers.dev" />
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" />
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "de Montfort LLC",
-  "url": "https://coivalidator.com",
-  "logo": "https://coivalidator.com/favicon.svg",
-  "description": "de Montfort LLC builds compliance and risk software including the COI Validator API.",
-  "brand": { "@type": "Brand", "name": "COI Validator" },
-  "contactPoint": { "@type": "ContactPoint", "contactType": "customer support", "email": "api@coivalidator.com" }
-}
+{"@context":"https://schema.org","@type":"WebApplication","name":"COI Validator","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Validate Certificates of Insurance for coverage gaps, missing endorsements, and expiration risks."}
 </script>
-</head>
-<body class="text-white antialiased">
-  <nav class="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between sticky top-0 z-50 bg-[#060918]/80 backdrop-blur-lg border-b border-white/[0.04]">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-sm font-bold">CV</div>
-      <span class="text-lg font-bold">COI Validator</span>
-      <span class="text-[10px] text-indigo-400 border border-indigo-500/30 rounded px-1.5 py-0.5 bg-indigo-500/10">API</span>
-    </div>
-    <div class="hidden md:flex items-center gap-6 text-sm text-gray-400">
-      <a href="#features" class="hover:text-white transition-colors">Features</a>
-      <a href="#demo" class="hover:text-white transition-colors">Demo</a>
-      <a href="#docs" class="hover:text-white transition-colors">Docs</a>
-      <a href="#pricing" class="hover:text-white transition-colors">Pricing</a>
-      <a href="#faq" class="hover:text-white transition-colors">FAQ</a>
-      <a href="https://tachyontracker.com/api-product" class="hover:text-white transition-colors">Full Platform</a>
-      <a href="mailto:api@coivalidator.com?subject=API%20Access%20Request" class="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg font-medium transition-colors">Get API Key</a>
-    </div>
-  </nav>
-
-  <main class="max-w-5xl mx-auto px-6 pt-20 pb-32">
-    <div class="text-center mb-20">
-      <div class="inline-flex items-center gap-2 bg-indigo-500/10 text-indigo-400 text-sm font-medium px-4 py-1.5 rounded-full mb-6 border border-indigo-500/20">
-        By de Montfort LLC — Makers of TachyonTracker
-      </div>
-      <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight">
-        COI Validation<br><span class="gradient-text">as a Service</span>
-      </h1>
-      <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-4">
-        Send a Certificate of Insurance image or text. Get a compliance score, gap analysis, and policy extraction — in under 3 seconds. Built for platforms that verify vendor insurance at scale.
-      </p>
-      <div class="flex items-center justify-center gap-6 text-sm text-gray-500 mb-10">
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> 99.9% uptime</span>
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> SOC 2 compliant</span>
-        <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-green-500"></span> 256-bit encryption</span>
-      </div>
-      <div class="flex items-center justify-center gap-4 flex-wrap">
-        <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base glow-sm">
-          Request API Key
-        </a>
-        <a href="#demo" class="border border-gray-700 text-gray-300 hover:text-white hover:border-gray-500 font-semibold px-8 py-3.5 rounded-xl transition-colors text-base">
-          Try Live Demo
-        </a>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-20" id="features">
-      <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-white mb-1">3s</p>
-        <p class="text-gray-500 text-xs">Average response time</p>
-      </div>
-      <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-indigo-400 mb-1">60%</p>
-        <p class="text-gray-500 text-xs">COIs have errors we catch</p>
-      </div>
-      <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-white mb-1">10K</p>
-        <p class="text-gray-500 text-xs">Validations per month</p>
-      </div>
-      <div class="glass rounded-xl p-5 text-center glass-hover transition-all">
-        <p class="text-3xl font-extrabold text-white mb-1">$0.04</p>
-        <p class="text-gray-500 text-xs">Per validation at scale</p>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
-      <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">⚡</div>
-        <h3 class="font-semibold mb-1.5">Instant Validation</h3>
-        <p class="text-gray-500 text-sm">Send a COI, get a 0-100 compliance score and detailed gap list. No manual review needed — AI checks every field.</p>
-      </div>
-      <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">📸</div>
-        <h3 class="font-semibold mb-1.5">Image + Text OCR</h3>
-        <p class="text-gray-500 text-sm">Upload a COI photo or paste extracted text. AI reads carrier name, policy numbers, dates, limits, and endorsements automatically.</p>
-      </div>
-      <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">✓</div>
-        <h3 class="font-semibold mb-1.5">Custom Requirements</h3>
-        <p class="text-gray-500 text-sm">Define GL, WC, Auto limits and endorsement requirements per vendor. Get pass/fail per field with specific gap descriptions.</p>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-20">
-      <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">🔔</div>
-        <h3 class="font-semibold mb-1.5">Expiration Alerts</h3>
-        <p class="text-gray-500 text-sm">Returns days-until-expiry for every policy. Webhook alerts when COIs expire — never caught with an uninsured contractor.</p>
-      </div>
-      <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">📊</div>
-        <h3 class="font-semibold mb-1.5">Structured JSON</h3>
-        <p class="text-gray-500 text-sm">Every response includes score, gaps, requirements_met, extracted policies, and endorsement status — ready for your database.</p>
-      </div>
-      <div class="glass rounded-xl p-6 glass-hover transition-all">
-        <div class="w-10 h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 mb-4 text-lg font-bold">🔒</div>
-        <h3 class="font-semibold mb-1.5">Secure by Default</h3>
-        <p class="text-gray-500 text-sm">API keys with per-key usage limits. TLS 1.3. Documents processed in memory only — never stored. SOC 2 compliant infrastructure.</p>
-      </div>
-    </div>
-
-    <div id="demo" class="mb-20">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold mb-2">Try the API — Live Demo</h2>
-        <p class="text-gray-500">Paste a Certificate of Insurance and see the validation response in real-time</p>
-      </div>
-      <div class="code-block rounded-2xl overflow-hidden glow">
-        <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
-          <span class="w-3 h-3 rounded-full bg-red-500/60"></span>
-          <span class="w-3 h-3 rounded-full bg-yellow-500/60"></span>
-          <span class="w-3 h-3 rounded-full bg-green-500/60"></span>
-          <span class="text-gray-500 text-xs ml-2">api-request.js</span>
-          <span class="text-gray-600 text-xs ml-auto">POST /api/validate-coi</span>
-        </div>
-        <div class="p-5">
-          <div class="mb-4">
-            <label class="text-xs text-gray-500 mb-1 block">COI Document Text</label>
-            <textarea id="coiInput" rows="6" class="w-full bg-black/30 border border-white/5 rounded-lg px-4 py-3 text-sm text-gray-300 font-mono focus:border-indigo-500/50 focus:outline-none resize-y" placeholder="Paste a Certificate of Insurance here...">CERTIFICATE OF INSURANCE
-
-PRODUCER: ABC Insurance Brokers, Inc.
-INSURED: Apex Contracting Services LLC
-
-COVERAGES:
-1. GENERAL LIABILITY - Policy: GL-2024-88432
-   Effective: 01/15/2025  Expiration: 01/15/2026
-   Limits: $500,000 Each Occurrence / $1,000,000 General Aggregate
-   ADDITIONAL INSURED: NOT LISTED
-
-2. WORKERS COMPENSATION - Policy: WC-2024-22987
-   Effective: 01/15/2025  Expiration: 01/15/2026
-   Limits: Statutory / $500,000 Employer's Liability
-   WAIVER OF SUBROGATION: NOT INCLUDED
-
-3. AUTOMOBILE LIABILITY - Policy: AL-2024-55412
-   Effective: 01/15/2025  Expiration: 01/15/2026
-   Limits: $250,000 Combined Single Limit
-
-4. UMBRELLA/EXCESS LIABILITY: NOT INCLUDED
-
-NOTICE OF CANCELLATION: 30 DAYS written notice</textarea>
-          </div>
-          <button onclick="runDemo()" id="demoBtn" class="bg-indigo-500 hover:bg-indigo-400 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors text-sm flex items-center gap-2">
-            <span id="demoBtnText">▶ Run Validation</span>
-          </button>
-          <div id="demoResult" class="mt-4 hidden demo-result"></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="docs" class="mb-20">
-      <h2 class="text-2xl font-bold mb-2">API Reference</h2>
-      <p class="text-gray-500 mb-6">Two endpoints. One header. Everything you need.</p>
-
-      <div class="space-y-4">
-        <div class="code-block rounded-xl overflow-hidden">
-          <div class="flex items-center gap-2 px-4 py-2.5 border-b border-white/5">
-            <span class="text-green-400 text-xs font-bold">POST</span>
-            <span class="text-gray-400 text-xs font-mono">/api/validate-coi</span>
-            <span class="text-gray-600 text-xs ml-auto">Primary endpoint</span>
-          </div>
-          <pre class="p-5 text-sm text-gray-300 leading-relaxed font-mono"><code>const response = await fetch(
-  'https://tachyontracker.com/api/validate-coi',
-  {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Bearer tt_live_...',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      text: 'CERTIFICATE OF INSURANCE...',
-      // OR: image: 'base64_encoded_image...',
-      mode: 'coi',
-      requirements: {
-        gl_per_occurrence: 1000000,
-        gl_aggregate: 2000000,
-        wc_statutory: true,
-        auto_combined: 500000,
-        additional_insured: true,
-        waiver_of_subrogation: true,
-        '30_day_cancellation': true,
-      }
-    }),
+<style>
+  :root{
+    --bg:#0b1220; --bg2:#0f1a2e; --panel:#ffffff; --ink:#0f172a; --muted:#5b6b85;
+    --line:#e6ebf3; --brand:#0ea5a4; --brand-deep:#0b7e7c; --brandink:#053b3a;
+    --ok:#16a34a; --okbg:#e9f9ef; --warn:#d97706; --warnbg:#fff5e6; --bad:#dc2626; --badbg:#fdeaea;
+    --shadow:0 10px 40px rgba(8,18,40,.10); --shadow-lg:0 24px 70px rgba(8,18,40,.18);
+    --r:16px;
   }
-);
-
-const result = await response.json();
-// {
-//   validation: {
-//     score: 62,
-//     gaps: [
-//       "GL aggregate below $2M ($1M found)",
-//       "Additional insured not listed",
-//       "No waiver of subrogation"
-//     ],
-//     requirements_met: {
-//       gl_per_occurrence: true,
-//       gl_aggregate: false,
-//       additional_insured: false,
-//       waiver_of_subrogation: false
-//     },
-//     policies: [...],
-//     additional_insured: false,
-//     waiver_of_subrogation: false,
-//     expires_in_days: 47
-//   },
-//   analysis: { overall_score: 62, summary: "..." },
-//   usage: { used: 1, limit: 500 }
-// }</code></pre>
-        </div>
-
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-semibold mb-4">Request Parameters</h3>
-          <div class="space-y-2 text-sm font-mono">
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">text</span> <span class="text-gray-600">string — COI document text (required if no image)</span></div>
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">image</span> <span class="text-gray-600">string — Base64-encoded COI image (required if no text)</span></div>
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">mode</span> <span class="text-gray-600">string — "coi" (default) or "contract"</span></div>
-            <div class="flex items-start gap-3"><span class="text-indigo-400 shrink-0">requirements</span> <span class="text-gray-600">object — Custom compliance requirements to validate against</span></div>
-          </div>
-        </div>
-
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-semibold mb-4">Response Fields</h3>
-          <div class="space-y-2 text-sm font-mono">
-            <div><span class="text-indigo-400">validation.score</span> <span class="text-gray-600">integer 0-100 — Overall compliance score</span></div>
-            <div><span class="text-indigo-400">validation.gaps</span> <span class="text-gray-600">string[] — List of compliance gaps found</span></div>
-            <div><span class="text-indigo-400">validation.requirements_met</span> <span class="text-gray-600">object — Pass/fail per requirement</span></div>
-            <div><span class="text-indigo-400">validation.policies</span> <span class="text-gray-600">object[] — Extracted policy details</span></div>
-            <div><span class="text-indigo-400">validation.additional_insured</span> <span class="text-gray-600">boolean</span></div>
-            <div><span class="text-indigo-400">validation.waiver_of_subrogation</span> <span class="text-gray-600">boolean</span></div>
-            <div><span class="text-indigo-400">validation.expires_in_days</span> <span class="text-gray-600">integer | null</span></div>
-            <div><span class="text-indigo-400">analysis.summary</span> <span class="text-gray-600">string — Plain English summary</span></div>
-            <div><span class="text-indigo-400">usage.used / usage.limit</span> <span class="text-gray-600">integer — Monthly usage tracking</span></div>
-          </div>
-        </div>
-
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-semibold mb-4">Error Responses</h3>
-          <div class="space-y-2 text-sm font-mono">
-            <div><span class="text-red-400">401</span> <span class="text-gray-600">— Invalid or missing API key (Authorization: Bearer header required)</span></div>
-            <div><span class="text-red-400">429</span> <span class="text-gray-600">— Monthly validation limit reached or rate limit exceeded</span></div>
-            <div><span class="text-red-400">400</span> <span class="text-gray-600">— Invalid request body or missing required fields</span></div>
-            <div><span class="text-red-400">413</span> <span class="text-gray-600">— Image too large (max 10MB after base64 encoding)</span></div>
-            <div><span class="text-red-400">502</span> <span class="text-gray-600">— AI service error (transient, retry recommended)</span></div>
-            <div><span class="text-red-400">503</span> <span class="text-gray-600">— Service temporarily unavailable</span></div>
-          </div>
-          <pre class="mt-3 p-3 bg-black/30 rounded-lg text-xs text-gray-500 font-mono overflow-x-auto"><code>// Example error response
-{
-  "error": "Monthly validation limit reached. Upgrade your plan at https://coivalidator.com"
-}</code></pre>
-        </div>
-
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-semibold mb-4">Rate Limits</h3>
-          <div class="space-y-2 text-sm text-gray-400">
-            <div class="flex justify-between"><span>Starter plan</span><span class="font-mono text-gray-500">10 req/min, 500/mo</span></div>
-            <div class="flex justify-between"><span>Pro plan</span><span class="font-mono text-gray-500">30 req/min, 2,000/mo</span></div>
-            <div class="flex justify-between"><span>Enterprise plan</span><span class="font-mono text-gray-500">60 req/min, 10,000/mo</span></div>
-          </div>
-          <p class="text-gray-600 text-xs mt-3">Rate limit headers are included in every response: X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset. Exceeding limits returns HTTP 429 with a Retry-After header.</p>
-        </div>
-
-        <div class="glass rounded-xl p-6">
-          <h3 class="font-semibold mb-4">Webhook: COI Expiration Alerts (Pro+)</h3>
-          <div class="space-y-2 text-sm text-gray-400">
-            <p>Configure a webhook URL in your dashboard to receive POST notifications when tracked COIs approach expiration. Webhooks fire at 60, 30, and 7 days before expiry.</p>
-          </div>
-          <pre class="mt-3 p-3 bg-black/30 rounded-lg text-xs text-gray-500 font-mono overflow-x-auto"><code>// Webhook payload (POST to your URL)
-{
-  "event": "coi.expiring",
-  "vendor": { "name": "...", "id": "..." },
-  "policy": { "type": "GL", "expiration": "2026-03-15" },
-  "days_until_expiry": 30,
-  "timestamp": "2026-02-13T00:00:00Z"
-}</code></pre>
-        </div>
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:'Inter',-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#f4f7fb;-webkit-font-smoothing:antialiased;line-height:1.55}
+  .wrap{max-width:980px;margin:0 auto;padding:0 20px}
+  a{color:var(--brand-deep)}
+  /* hero */
+  header.hero{background:radial-gradient(1200px 500px at 50% -10%,#16263f 0%,var(--bg) 60%);color:#eaf0fb;padding:26px 0 60px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0 30px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.02em;color:#fff;font-size:18px}
+  .logo .badge{width:30px;height:30px;border-radius:7px;background:#0a0f1c;display:inline-flex;align-items:center;justify-content:center;flex:none}
+  .logo .badge svg{display:block}
+  .topbar nav a{color:#b9c6df;text-decoration:none;font-size:14px;font-weight:600;margin-left:18px}
+  .topbar nav a:hover{color:#fff}
+  .hero h1{font-size:clamp(28px,5vw,46px);line-height:1.08;margin:.2em 0 .25em;letter-spacing:-.025em;font-weight:800}
+  .hero h1 .hl{color:#5eead4}
+  .hero p.sub{font-size:clamp(15px,2.2vw,19px);color:#aebbd3;max-width:620px;margin:0 auto 6px;text-align:center}
+  .hero .center{text-align:center}
+  .trustrow{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:16px;color:#8fa0c0;font-size:13px;font-weight:600}
+  .trustrow span{display:inline-flex;align-items:center;gap:6px}
+  /* card / dropzone */
+  .stage{margin-top:-38px}
+  .card{background:var(--panel);border-radius:var(--r);box-shadow:var(--shadow-lg);overflow:hidden}
+  .pad{padding:clamp(18px,3.5vw,32px)}
+  .drop{border:2.5px dashed #c7d3e6;border-radius:14px;background:#fbfdff;padding:34px 20px;text-align:center;cursor:pointer;transition:.18s}
+  .drop:hover,.drop.over{border-color:var(--brand);background:#f0fbfb}
+  .drop .ic{width:54px;height:54px;border-radius:14px;background:#e7f7f6;color:var(--brand-deep);display:inline-flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .drop h3{margin:.1em 0 .25em;font-size:19px}
+  .drop p{margin:0;color:var(--muted);font-size:14px}
+  .or{display:flex;align-items:center;gap:12px;color:#9aa8c0;font-size:13px;margin:18px 0;font-weight:600}
+  .or:before,.or:after{content:"";height:1px;background:var(--line);flex:1}
+  textarea{width:100%;min-height:120px;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;font:inherit;font-size:14px;resize:vertical;color:var(--ink)}
+  textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px #0ea5a41f}
+  .reqrow{margin-top:18px}
+  .label{font-weight:700;font-size:13px;color:#33415c;display:flex;align-items:center;gap:7px;margin-bottom:9px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;cursor:pointer;color:#3a4a66;transition:.15s}
+  .chip:hover{border-color:#bcd}
+  .chip.on{background:var(--brandink);border-color:var(--brandink);color:#eafffd}
+  .custom-req{margin-top:10px;display:none}
+  .custom-req.show{display:block}
+  .actions{display:flex;gap:12px;align-items:center;margin-top:20px;flex-wrap:wrap}
+  .btn{appearance:none;border:0;border-radius:12px;padding:14px 22px;font:inherit;font-weight:700;font-size:15.5px;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:9px}
+  .btn.primary{background:linear-gradient(180deg,#13b5b3,var(--brand-deep));color:#fff;box-shadow:0 8px 22px #0ea5a43d}
+  .btn.primary:hover{filter:brightness(1.05)}
+  .btn.primary:disabled{opacity:.55;cursor:not-allowed;filter:none}
+  .btn.ghost{background:#eef3f9;color:#33415c}
+  .btn.ghost:hover{background:#e3ebf5}
+  .filechip{display:none;align-items:center;gap:9px;background:#eef7f7;border:1px solid #cdebea;color:#0b6b69;border-radius:10px;padding:8px 12px;font-size:13.5px;font-weight:600;margin-top:14px}
+  .filechip.show{display:inline-flex}
+  .filechip .x{cursor:pointer;color:#0b6b69;opacity:.7;font-weight:800}
+  .hint{color:#8090aa;font-size:12.5px;margin-top:12px}
+  /* loading */
+  .loading{display:none;text-align:center;padding:46px 20px}
+  .loading.show{display:block}
+  .spin{width:46px;height:46px;border-radius:50%;border:4px solid #e3ebf5;border-top-color:var(--brand);animation:sp .8s linear infinite;margin:0 auto 18px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .steps{color:var(--muted);font-size:14.5px;font-weight:600;min-height:22px}
+  /* results */
+  #result{display:none}
+  #result.show{display:block}
+  .verdict{display:flex;align-items:center;gap:18px;padding:22px clamp(18px,3.5vw,30px);color:#fff;flex-wrap:wrap}
+  .verdict.ok{background:linear-gradient(120deg,#15a34a,#0f7a39)}
+  .verdict.warn{background:linear-gradient(120deg,#e08a08,#b96d04)}
+  .verdict.bad{background:linear-gradient(120deg,#e23b3b,#b51f1f)}
+  .ring{width:78px;height:78px;border-radius:50%;flex:none;display:grid;place-items:center;background:rgba(255,255,255,.16);font-weight:800;font-size:24px;border:3px solid rgba(255,255,255,.45)}
+  .verdict .vt{font-size:13px;text-transform:uppercase;letter-spacing:.12em;opacity:.9;font-weight:700}
+  .verdict .vh{font-size:clamp(17px,2.6vw,22px);font-weight:800;line-height:1.2;margin-top:3px}
+  .section{padding:22px clamp(18px,3.5vw,30px);border-top:1px solid var(--line)}
+  .section h4{margin:0 0 14px;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7a89a3}
+  .checks{display:grid;gap:10px}
+  .check{display:flex;gap:12px;align-items:flex-start;padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:#fff}
+  .check .mk{width:24px;height:24px;border-radius:7px;flex:none;display:grid;place-items:center;font-weight:800;color:#fff;font-size:14px}
+  .check.pass .mk{background:var(--ok)} .check.fail .mk{background:var(--bad)}
+  .check .cl{font-weight:700;font-size:14.5px}
+  .check .cf{font-size:13px;color:var(--muted);margin-top:2px}
+  .check .cw{font-size:13px;color:#42526e;margin-top:5px}
+  table.pol{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.pol th{text-align:left;color:#7a89a3;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;padding:0 10px 8px}
+  table.pol td{padding:11px 10px;border-top:1px solid var(--line);vertical-align:top}
+  .pill{display:inline-block;border-radius:999px;padding:3px 9px;font-size:11.5px;font-weight:700}
+  .pill.ok{background:var(--okbg);color:#0f7a39}.pill.low{background:var(--warnbg);color:#9a5a04}
+  .pill.expired{background:var(--badbg);color:#b51f1f}.pill.expiring{background:var(--warnbg);color:#9a5a04}.pill.missing{background:#eef1f6;color:#6b7790}
+  .risk{padding:14px;border:1px solid #f0d9d9;background:#fffaf9;border-radius:12px;margin-bottom:10px}
+  .risk .ri{font-weight:800;font-size:14.5px;color:#9b1c1c}
+  .risk .rp{font-size:13.5px;color:#42526e;margin:5px 0}
+  .risk .rf{font-size:13.5px;background:#eefaf3;border-left:3px solid var(--ok);padding:8px 11px;border-radius:8px;color:#155e34}
+  .emailbox{border:1px solid var(--line);border-radius:12px;background:#f9fbfe;padding:14px;font-size:13.5px;white-space:pre-wrap;color:#33415c}
+  .resfoot{display:flex;gap:12px;flex-wrap:wrap;padding:20px clamp(18px,3.5vw,30px);background:#f9fbfe;border-top:1px solid var(--line)}
+  /* funnel */
+  .upsell{margin:26px 0 0;background:linear-gradient(120deg,#10243e,#0b1220);color:#dce6f7;border-radius:var(--r);padding:26px clamp(20px,4vw,34px);display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .upsell h3{margin:0 0 5px;color:#fff;font-size:20px}
+  .upsell p{margin:0;color:#9fb0cd;font-size:14.5px;max-width:520px}
+  .upsell .btn.primary{white-space:nowrap}
+  /* trust / how */
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:30px 0}
+  @media(max-width:720px){.how{grid-template-columns:1fr}}
+  .step{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px}
+  .step .n{width:30px;height:30px;border-radius:9px;background:var(--brandink);color:#eafffd;display:grid;place-items:center;font-weight:800;margin-bottom:10px}
+  .step h5{margin:0 0 5px;font-size:15.5px}
+  .step p{margin:0;color:var(--muted);font-size:13.5px}
+  .faq{margin:8px 0 40px}
+  .faq details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 16px;margin-bottom:10px}
+  .faq summary{cursor:pointer;font-weight:700;padding:13px 0;font-size:15px}
+  .faq p{color:var(--muted);font-size:14px;margin:0 0 14px}
+  footer{background:var(--bg);color:#8c9bb8;padding:30px 0;font-size:13px}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  footer a{color:#aab8d4;text-decoration:none;margin-left:16px}
+  .err{display:none;background:var(--badbg);color:#b51f1f;border:1px solid #f3c9c9;border-radius:12px;padding:13px 15px;font-size:14px;font-weight:600;margin-top:16px}
+  .err.show{display:block}
+  @media print{
+    header.hero,.upsell,.how,.faq,footer,.resfoot,.topbar{display:none!important}
+    body{background:#fff}.stage{margin:0}.card{box-shadow:none;border:1px solid #ddd}
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="logo">
+        <span class="badge">
+          <svg height="20" viewBox="0 0 64 64"><g transform="skewX(8)"><rect x="11" y="13" width="10" height="38" rx="0" fill="#3b82f6"/><rect x="24" y="13" width="10" height="38" fill="#22c55e"/><rect x="37" y="13" width="10" height="38" fill="#f97316"/></g></svg>
+        </span>
+        COI&nbsp;Validator
+      </div>
+      <nav>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://tachyontracker.com" target="_blank" rel="noopener">For teams →</a>
+      </nav>
+    </div>
+    <div class="center">
+      <h1>Is this Certificate of Insurance<br><span class="hl">actually any good?</span></h1>
+      <p class="sub">Drop in a COI — PDF or a phone photo — and get a plain-English verdict an insurance pro would trust. Coverage limits, Additional Insured, Waiver of Subrogation, expiration dates, all checked in seconds.</p>
+      <div class="trustrow">
+        <span>✓ Free to try — no signup</span>
+        <span>✓ PDF or photo</span>
+        <span>✓ Results in ~10 seconds</span>
       </div>
     </div>
+  </div>
+</header>
 
-    <div id="pricing" class="mb-20">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold mb-2">Simple, Transparent Pricing</h2>
-        <p class="text-gray-500">Pay per validation. No setup fees. Cancel anytime.</p>
+<main class="wrap stage">
+  <div class="card">
+    <!-- INPUT -->
+    <div class="pad" id="input">
+      <div class="drop" id="drop">
+        <div class="ic">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h3>Drop your Certificate of Insurance here</h3>
+        <p>or <strong>click to choose a file</strong> — PDF, JPG, or PNG (a clear photo works)</p>
+        <input type="file" id="file" accept=".pdf,image/*" hidden />
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div class="glass rounded-2xl p-6 glass-hover transition-all">
-          <h3 class="text-lg font-semibold mb-1">Starter</h3>
-          <p class="text-gray-500 text-xs mb-4">500 validations/month</p>
-          <p class="text-3xl font-extrabold text-white mb-1">$49<span class="text-sm font-normal text-gray-500">/mo</span></p>
-          <p class="text-gray-600 text-xs mb-6">$0.10/validation</p>
-          <ul class="space-y-2 text-sm text-gray-400 mb-6">
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Image OCR included</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Custom requirements</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Structured JSON output</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 1 API key</li>
-          </ul>
-          <a href="https://buy.stripe.com/dRmeV65QH5D4aKq53odUY00" class="block text-center border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 px-4 py-2.5 rounded-lg font-medium transition-colors text-sm">Get Started</a>
+      <div class="filechip" id="filechip"><span id="filename"></span><span class="x" id="filex">✕</span></div>
+
+      <div class="or">or paste the text</div>
+      <textarea id="text" placeholder="Paste the text from the certificate here…"></textarea>
+
+      <div class="reqrow">
+        <div class="label">What do you require? <span title="Pick the profile that matches your situation. We'll check the COI against the standard insurance requirements for it." style="cursor:help;color:#9aa8c0">ⓘ</span></div>
+        <div class="chips" id="chips">
+          <div class="chip on" data-req="Standard general-contractor requirements: General Liability $1,000,000 per occurrence / $2,000,000 aggregate; Auto $1,000,000 CSL; Workers Comp statutory + Employers Liability $500,000; Additional Insured, Waiver of Subrogation, and Primary &amp; Non-Contributory endorsements required.">General contractor</div>
+          <div class="chip" data-req="Property manager / landlord requirements: General Liability $1,000,000/$2,000,000; Additional Insured naming the property owner and manager; Waiver of Subrogation; 30-day cancellation notice; coverage must not be expired.">Property manager</div>
+          <div class="chip" data-req="Hiring a subcontractor: General Liability $1,000,000/$2,000,000; Workers Compensation statutory; Auto $1,000,000; Additional Insured + Waiver of Subrogation in favor of the general contractor.">Hiring a subcontractor</div>
+          <div class="chip" data-req="__CUSTOM__">Custom…</div>
         </div>
-        <div class="glass rounded-2xl p-6 border-indigo-500/30 bg-indigo-500/[0.03] glow-sm">
-          <div class="text-xs text-indigo-400 font-semibold mb-3">MOST POPULAR</div>
-          <h3 class="text-lg font-semibold mb-1">Pro</h3>
-          <p class="text-gray-500 text-xs mb-4">2,000 validations/month</p>
-          <p class="text-3xl font-extrabold text-white mb-1">$149<span class="text-sm font-normal text-gray-500">/mo</span></p>
-          <p class="text-gray-600 text-xs mb-6">$0.07/validation</p>
-          <ul class="space-y-2 text-sm text-gray-400 mb-6">
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Everything in Starter</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Expiration webhooks</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 3 API keys</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Priority support</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Batch endpoint (coming soon)</li>
-          </ul>
-          <a href="https://buy.stripe.com/4gM28k6UL6H85q667sdUY01" class="block text-center bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2.5 rounded-lg font-semibold transition-colors text-sm">Get Started</a>
-        </div>
-        <div class="glass rounded-2xl p-6 glass-hover transition-all">
-          <h3 class="text-lg font-semibold mb-1">Enterprise</h3>
-          <p class="text-gray-500 text-xs mb-4">10,000 validations/month</p>
-          <p class="text-3xl font-extrabold text-white mb-1">$399<span class="text-sm font-normal text-gray-500">/mo</span></p>
-          <p class="text-gray-600 text-xs mb-6">$0.04/validation</p>
-          <ul class="space-y-2 text-sm text-gray-400 mb-6">
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Everything in Pro</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 25 API keys</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Custom SLA</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> White-label options</li>
-            <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Dedicated support</li>
-          </ul>
-          <a href="mailto:api@coivalidator.com?subject=Enterprise%20Plan%20-%20API%20Access&body=Company%3A%20%0AMonthly%20volume%3A%20%0AIntegration%20details%3A%20" class="block text-center border border-indigo-500/30 text-indigo-400 hover:bg-indigo-500/10 px-4 py-2.5 rounded-lg font-medium transition-colors text-sm">Contact Us</a>
+        <div class="custom-req" id="customWrap">
+          <textarea id="customReq" placeholder="Describe your requirements in plain English, e.g. 'GL at least $2M aggregate, must list us as additional insured, no expired policies.'"></textarea>
         </div>
       </div>
-      <p class="text-center text-gray-600 text-xs mt-6">Overage: $0.10/validation beyond plan limit · Annual billing: 20% discount · All plans include TLS 1.3, rate limiting, and audit logging</p>
+
+      <div class="actions">
+        <button class="btn primary" id="go">Check this certificate</button>
+        <button class="btn ghost" id="sample">Try a sample COI</button>
+      </div>
+      <div class="err" id="err"></div>
+      <div class="hint">Your document is analyzed to generate this report and is not stored. For tracking many vendors automatically, see <a href="https://tachyontracker.com" target="_blank" rel="noopener">TachyonTracker</a>.</div>
     </div>
 
-    <div class="glass rounded-2xl p-8 mb-20">
-      <h3 class="text-xl font-bold mb-2">Built For Platforms That Verify Vendor Insurance</h3>
-      <p class="text-gray-500 text-sm mb-6">Integrate COI validation directly into your existing workflow. Your users never leave your platform.</p>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
-        <div>
-          <p class="text-white font-semibold mb-1">Construction PM</p>
-          <p class="text-gray-600 text-xs">Procore, BuilderTrend, or your own platform — verify every sub's COI at onboarding</p>
-        </div>
-        <div>
-          <p class="text-white font-semibold mb-1">Property Management</p>
-          <p class="text-gray-600 text-xs">Auto-verify vendor and tenant insurance before approving work orders</p>
-        </div>
-        <div>
-          <p class="text-white font-semibold mb-1">Staffing Platforms</p>
-          <p class="text-gray-600 text-xs">Validate contractor insurance compliance before every dispatch</p>
-        </div>
-        <div>
-          <p class="text-white font-semibold mb-1">Insurance Brokerages</p>
-          <p class="text-gray-600 text-xs">Audit COIs at scale for carrier programs and captive insurers</p>
-        </div>
+    <!-- LOADING -->
+    <div class="loading" id="loading">
+      <div class="spin"></div>
+      <div class="steps" id="steps">Reading your certificate…</div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="result">
+      <div class="verdict" id="verdict">
+        <div class="ring" id="ring">—</div>
+        <div><div class="vt" id="vtag">Result</div><div class="vh" id="vhead"></div></div>
+      </div>
+      <div class="section" id="policiesSec">
+        <h4>Policies on this certificate</h4>
+        <table class="pol"><thead><tr><th>Coverage</th><th>Limits</th><th>Expires</th><th>Status</th></tr></thead><tbody id="polBody"></tbody></table>
+      </div>
+      <div class="section" id="checksSec">
+        <h4>Requirement checklist</h4>
+        <div class="checks" id="checks"></div>
+      </div>
+      <div class="section" id="risksSec">
+        <h4>Top risks &amp; how to fix them</h4>
+        <div id="risks"></div>
+      </div>
+      <div class="section" id="emailSec">
+        <h4>Ready-to-send fix request</h4>
+        <div class="emailbox" id="emailBox"></div>
+      </div>
+      <div class="resfoot">
+        <button class="btn primary" id="dl">⤓ Download PDF report</button>
+        <button class="btn ghost" id="copyEmail">Copy fix email</button>
+        <button class="btn ghost" id="again">Check another</button>
       </div>
     </div>
+  </div>
 
-    <div class="glass rounded-xl p-8 mb-20">
-      <h3 class="text-lg font-bold mb-6">Compare: COI Validator API vs. Manual Review vs. GRC Tools</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="text-gray-500 text-left border-b border-white/5">
-              <th class="pb-3 pr-4">Feature</th>
-              <th class="pb-3 pr-4 text-center">COI Validator API</th>
-              <th class="pb-3 pr-4 text-center">Manual Review</th>
-              <th class="pb-3 text-center">ISNetworld / Avetta</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-400">
-            <tr class="border-b border-white/[0.03]">
-              <td class="py-3 pr-4">Cost per validation</td>
-              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">$0.04–0.10</td>
-              <td class="py-3 pr-4 text-center">$15–25 (labor)</td>
-              <td class="py-3 text-center">$1,500+/yr + contractor fees</td>
-            </tr>
-            <tr class="border-b border-white/[0.03]">
-              <td class="py-3 pr-4">Response time</td>
-              <td class="py-3 pr-4 text-center text-indigo-400 font-semibold">3 seconds</td>
-              <td class="py-3 pr-4 text-center">15–20 minutes</td>
-              <td class="py-3 text-center">1–3 business days</td>
-            </tr>
-            <tr class="border-b border-white/[0.03]">
-              <td class="py-3 pr-4">API integration</td>
-              <td class="py-3 pr-4 text-center text-green-400">✓</td>
-              <td class="py-3 pr-4 text-center text-red-400">✗</td>
-              <td class="py-3 text-center text-red-400">✗</td>
-            </tr>
-            <tr class="border-b border-white/[0.03]">
-              <td class="py-3 pr-4">Custom requirements</td>
-              <td class="py-3 pr-4 text-center text-green-400">✓</td>
-              <td class="py-3 pr-4 text-center text-yellow-400">Manual</td>
-              <td class="py-3 text-center text-yellow-400">Limited</td>
-            </tr>
-            <tr class="border-b border-white/[0.03]">
-              <td class="py-3 pr-4">Image OCR</td>
-              <td class="py-3 pr-4 text-center text-green-400">✓</td>
-              <td class="py-3 pr-4 text-center text-red-400">✗</td>
-              <td class="py-3 text-center text-yellow-400">Partial</td>
-            </tr>
-            <tr>
-              <td class="py-3 pr-4">Contractor pays</td>
-              <td class="py-3 pr-4 text-center text-green-400">No</td>
-              <td class="py-3 pr-4 text-center text-green-400">No</td>
-              <td class="py-3 text-center text-red-400">Yes ($200+/yr)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- FUNNEL -->
+  <div class="upsell">
+    <div>
+      <h3>Checking COIs one at a time?</h3>
+      <p>TachyonTracker tracks every vendor's insurance automatically — stores certificates, watches expiration dates, emails you before coverage lapses, and scans full contracts for risk. COI Validator is the free taste; TachyonTracker is the whole kitchen.</p>
     </div>
+    <a class="btn primary" href="https://tachyontracker.com" target="_blank" rel="noopener">See TachyonTracker →</a>
+  </div>
 
-    <div id="faq" class="mb-20">
-      <h2 class="text-2xl font-bold mb-6">FAQ</h2>
-      <div class="space-y-3">
-        <details class="glass rounded-xl p-5">
-          <summary class="font-semibold text-sm flex items-center justify-between">What file formats does the COI Validator API accept?</summary>
-          <p class="text-gray-400 text-sm mt-3">The API accepts base64-encoded images (PNG, JPG), raw COI text, and PDF documents. You can also pass extracted text from your own OCR pipeline.</p>
-        </details>
-        <details class="glass rounded-xl p-5">
-          <summary class="font-semibold text-sm flex items-center justify-between">How fast is the API response?</summary>
-          <p class="text-gray-400 text-sm mt-3">Average response time is 2-4 seconds for text validation and 3-6 seconds for image OCR + validation. The AI model processes each COI individually for maximum accuracy.</p>
-        </details>
-        <details class="glass rounded-xl p-5">
-          <summary class="font-semibold text-sm flex items-center justify-between">Can I customize the compliance requirements?</summary>
-          <p class="text-gray-400 text-sm mt-3">Yes. Pass a requirements object with your specific GL per-occurrence/aggregate limits, WC statutory requirements, auto liability minimums, and endorsement requirements (Additional Insured, Waiver of Subrogation, 30-day cancellation, Primary & Non-Contributory).</p>
-        </details>
-        <details class="glass rounded-xl p-5">
-          <summary class="font-semibold text-sm flex items-center justify-between">Is there a free tier or trial?</summary>
-          <p class="text-gray-400 text-sm mt-3">You can test the scanner free at tachyontracker.com/scan (5 scans/month). For API access, the Starter plan at $49/mo includes 500 validations. Contact us for a test key.</p>
-        </details>
-        <details class="glass rounded-xl p-5">
-          <summary class="font-semibold text-sm flex items-center justify-between">How does the API compare to manual COI review?</summary>
-          <p class="text-gray-400 text-sm mt-3">Manual COI review takes 15-20 minutes per document and misses 60% of errors. The COI Validator API checks coverage limits, endorsements, expiration dates, and compliance gaps in under 5 seconds with higher accuracy.</p>
-        </details>
-        <details class="glass rounded-xl p-5">
-          <summary class="font-semibold text-sm flex items-center justify-between">What about data privacy and security?</summary>
-          <p class="text-gray-400 text-sm mt-3">Documents are processed in memory only and never stored. All API calls use TLS 1.3 encryption. API keys are hashed, and usage is tracked per-key. Infrastructure is SOC 2 compliant with 256-bit encryption at rest.</p>
-        </details>
-      </div>
+  <!-- HOW -->
+  <section id="how">
+    <div class="how">
+      <div class="step"><div class="n">1</div><h5>Drop it in</h5><p>Upload a PDF or snap a photo of the ACORD certificate. No account, no setup.</p></div>
+      <div class="step"><div class="n">2</div><h5>We read &amp; check it</h5><p>Every coverage line, limit, endorsement, and expiration date is checked against your requirements.</p></div>
+      <div class="step"><div class="n">3</div><h5>Get a clear verdict</h5><p>Plain-English pass/fail, the exact gaps, and a ready-to-send email to get them fixed.</p></div>
     </div>
+  </section>
 
-    <div class="text-center glass rounded-2xl p-10 glow">
-      <h2 class="text-2xl font-bold mb-3">Ready to automate COI verification?</h2>
-      <p class="text-gray-400 mb-6">Get an API key and start validating Certificates of Insurance in minutes.</p>
-      <div class="flex items-center justify-center gap-4 flex-wrap">
-        <a href="mailto:api@coivalidator.com?subject=COI%20Validator%20API%20-%20Access%20Request&body=Company%3A%20%0AUse%20case%3A%20%0AMonthly%20volume%20estimate%3A%20%0AIntegration%20platform%3A%20" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3.5 rounded-xl transition-colors text-base">
-          Request API Key
-        </a>
-        <a href="https://tachyontracker.com/scan" class="border border-gray-700 text-gray-300 hover:text-white font-semibold px-8 py-3.5 rounded-xl transition-colors text-base">
-          Try Free Scanner
-        </a>
-      </div>
-      <p class="text-gray-600 text-xs mt-4">Starter: $49/mo (500 validations) · Pro: $149/mo (2,000) · Enterprise: $399/mo (10,000)</p>
+  <!-- FAQ -->
+  <section id="faq" class="faq">
+    <details><summary>What is a Certificate of Insurance (COI)?</summary><p>A COI (often an ACORD 25 form) is a one-page summary proving a business carries insurance — what types, how much, and until when. Before you let a contractor or vendor work for you, you check their COI to make sure you're protected if something goes wrong.</p></details>
+    <details><summary>Do I need to understand insurance to use this?</summary><p>No. Drop in the certificate and we explain everything in plain language — what's covered, what's missing, and exactly what to ask for. It's built so anyone can use it, while being precise enough for a professional risk manager.</p></details>
+    <details><summary>Is a photo from my phone good enough?</summary><p>Yes. A clear, well-lit photo of the certificate works — we read it directly. PDFs give the most accurate results.</p></details>
+    <details><summary>Is it free? Is my document stored?</summary><p>Trying it is free with no signup. Your document is used only to produce your report and isn't stored. For tracking many vendors and automatic expiration alerts, TachyonTracker offers paid plans.</p></details>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="yr"></span> COI Validator — a de Montfort LLC product.</div>
+    <div>
+      <a href="https://tachyontracker.com" target="_blank" rel="noopener">TachyonTracker</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
     </div>
+  </div>
+</footer>
 
-    <div id="privacy" class="mb-20">
-      <h2 class="text-2xl font-bold mb-6">Privacy Policy</h2>
-      <div class="glass rounded-xl p-6 space-y-4 text-sm text-gray-400">
-        <p><span class="text-white font-medium">Effective Date:</span> January 1, 2026</p>
-        <p>COI Validator API is operated by de Montfort LLC. This policy describes how we handle your data when you use our API service and website.</p>
-        <h3 class="text-white font-semibold pt-2">Data We Process</h3>
-        <p>When you submit a COI for validation, the document text or image is sent to our AI processing pipeline. Documents are processed in memory only and are never stored on our servers, in our databases, or in logs. We do not retain, archive, or cache any submitted COI content after the validation response is returned.</p>
-        <h3 class="text-white font-semibold pt-2">API Key Data</h3>
-        <p>API keys are stored as SHA-256 hashes. Your usage count and last-used timestamp are tracked per key for billing and rate limiting. We do not track or store the content of your API requests beyond transient processing.</p>
-        <h3 class="text-white font-semibold pt-2">Analytics</h3>
-        <p>We track aggregate request counts, error rates, and latency metrics for service monitoring. No personally identifiable information is collected in analytics. We do not use cookies or third-party tracking scripts on this website.</p>
-        <h3 class="text-white font-semibold pt-2">Third Parties</h3>
-        <p>COI text is processed by our AI provider (OpenRouter/Google) under their data processing agreement. OpenRouter does not use submitted content for model training. No other third parties receive your data.</p>
-        <h3 class="text-white font-semibold pt-2">Security</h3>
-        <p>All API traffic uses TLS 1.3 encryption. Infrastructure is hosted on Cloudflare with SOC 2 Type II compliance. API keys are hashed at rest. We maintain audit logs of API authentication events.</p>
-        <h3 class="text-white font-semibold pt-2">Your Rights</h3>
-        <p>You may request deletion of your API key data at any time by contacting api@coivalidator.com. Since we do not store COI content, no document deletion is necessary.</p>
-        <h3 class="text-white font-semibold pt-2">Contact</h3>
-        <p>Privacy inquiries: api@coivalidator.com · de Montfort LLC</p>
-      </div>
-    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const API='https://coivalidator-api.tachyontracker.workers.dev/api/analyze';
+if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const $=s=>document.querySelector(s);
+document.getElementById('yr').textContent=new Date().getFullYear();
+let chosenFile=null, requirement=document.querySelector('.chip.on').dataset.req;
 
-    <div id="terms" class="mb-20">
-      <h2 class="text-2xl font-bold mb-6">Terms of Service</h2>
-      <div class="glass rounded-xl p-6 space-y-4 text-sm text-gray-400">
-        <p><span class="text-white font-medium">Effective Date:</span> January 1, 2026</p>
-        <p>By using the COI Validator API, you agree to these terms. If you do not agree, do not use the service.</p>
-        <h3 class="text-white font-semibold pt-2">Service Description</h3>
-        <p>COI Validator API provides automated Certificate of Insurance validation via a REST API. Results are AI-generated assessments and should not be used as the sole basis for compliance decisions. You are responsible for verifying validation results against your specific regulatory and contractual requirements.</p>
-        <h3 class="text-white font-semibold pt-2">Usage Limits</h3>
-        <p>Each plan includes a monthly validation limit. Requests beyond your plan limit will be rejected (HTTP 429) or charged at the overage rate. Rate limits apply per API key to prevent abuse.</p>
-        <h3 class="text-white font-semibold pt-2">API Keys</h3>
-        <p>You are responsible for keeping your API keys confidential. Unauthorized use of your keys is your responsibility. Notify us immediately at api@coivalidator.com if a key is compromised.</p>
-        <h3 class="text-white font-semibold pt-2">Intellectual Property</h3>
-        <p>You retain all rights to COI documents you submit. We do not store, reproduce, or distribute your documents. The validation results and API response format are provided for your use under your subscription.</p>
-        <h3 class="text-white font-semibold pt-2">Limitation of Liability</h3>
-        <p>The service is provided "as is" without warranties. de Montfort LLC shall not be liable for any damages arising from use of the service, including but not limited to compliance decisions made based on validation results. Total liability shall not exceed fees paid in the prior 30 days.</p>
-        <h3 class="text-white font-semibold pt-2">Termination</h3>
-        <p>We may suspend or terminate access for violation of these terms. You may cancel your subscription at any time. No refunds for partial months.</p>
-        <h3 class="text-white font-semibold pt-2">Governing Law</h3>
-        <p>These terms are governed by the laws of the State of Texas, United States.</p>
-        <h3 class="text-white font-semibold pt-2">Contact</h3>
-        <p>Legal inquiries: api@coivalidator.com · de Montfort LLC</p>
-      </div>
-    </div>
-  </main>
+// requirement chips
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+  document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+  c.classList.add('on');
+  const custom=c.dataset.req==='__CUSTOM__';
+  $('#customWrap').classList.toggle('show',custom);
+  requirement=custom?'':c.dataset.req;
+}));
 
-  <footer class="border-t border-white/5 py-8">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-600">
-      <span>&copy; 2026 de Montfort LLC. All rights reserved.</span>
-      <div class="flex items-center gap-6">
-        <a href="https://tachyontracker.com" class="hover:text-white transition-colors">TachyonTracker</a>
-        <a href="https://tachyontracker.com/api-product" class="hover:text-white transition-colors">Full Platform</a>
-        <a href="https://tachyontracker.com/partners" class="hover:text-white transition-colors">Partners</a>
-        <a href="https://tachyontracker.com/trust" class="hover:text-white transition-colors">Trust Center</a>
-        <a href="#privacy" class="hover:text-white transition-colors">Privacy</a>
-        <a href="#terms" class="hover:text-white transition-colors">Terms</a>
-        <a href="https://github.com/bobfromarcher/LocoPilot" class="hover:text-white transition-colors">LocoPilot</a>
-      </div>
-    </div>
-  </footer>
+// file handling
+const drop=$('#drop'), fileInput=$('#file');
+drop.addEventListener('click',()=>fileInput.click());
+['dragover','dragenter'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('over')}));
+drop.addEventListener('drop',ev=>{if(ev.dataTransfer.files[0])setFile(ev.dataTransfer.files[0])});
+fileInput.addEventListener('change',()=>{if(fileInput.files[0])setFile(fileInput.files[0])});
+$('#filex').addEventListener('click',()=>{chosenFile=null;$('#filechip').classList.remove('show');fileInput.value=''});
+function setFile(f){chosenFile=f;$('#filename').textContent=f.name;$('#filechip').classList.add('show');$('#text').value='';hideErr()}
 
-  <script>
-    async function runDemo() {
-      const btn = document.getElementById('demoBtn');
-      const btnText = document.getElementById('demoBtnText');
-      const result = document.getElementById('demoResult');
-      const input = document.getElementById('coiInput');
+function showErr(m){const e=$('#err');e.textContent=m;e.classList.add('show')}
+function hideErr(){$('#err').classList.remove('show')}
 
-      if (!input.value.trim()) return;
+async function readPdf(file){
+  const buf=await file.arrayBuffer();
+  const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+  let out='';
+  for(let i=1;i<=Math.min(pdf.numPages,6);i++){
+    const page=await pdf.getPage(i);
+    const tc=await page.getTextContent();
+    out+=tc.items.map(it=>it.str).join(' ')+'\n';
+  }
+  return out.trim();
+}
+const toB64=file=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)});
 
-      btn.disabled = true;
-      btnText.textContent = '⏳ Validating...';
-      result.classList.add('hidden');
+const sampleCOI=`ACORD CERTIFICATE OF LIABILITY INSURANCE  DATE 2025-06-01
+INSURED: Apex Contracting Services LLC, 41 Industrial Way
+CERTIFICATE HOLDER: De Montfort LLC
+INSURER A: Summit Mutual Insurance
+COMMERCIAL GENERAL LIABILITY  Policy GL-88213  Each Occurrence $500,000  General Aggregate $1,000,000  Eff 2025-06-01 Exp 2026-06-20
+AUTOMOBILE LIABILITY  Policy AU-5521  Combined Single Limit $1,000,000  Eff 2025-06-01 Exp 2026-12-31
+WORKERS COMPENSATION  Policy WC-7740  Statutory  Employers Liability $500,000  Exp 2026-12-31
+Additional Insured: NO    Waiver of Subrogation: NO    Primary & Non-Contributory: NO`;
 
-      try {
-        const response = await fetch('https://tachyontracker.com/api/demo-validate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            text: input.value,
-            mode: 'coi',
-            requirements: {
-              gl_per_occurrence: 1000000,
-              gl_aggregate: 2000000,
-              wc_statutory: true,
-              auto_combined: 500000,
-              additional_insured: true,
-              waiver_of_subrogation: true,
-              '30_day_cancellation': true,
-            }
-          })
-        });
+$('#sample').addEventListener('click',()=>{
+  chosenFile=null;$('#filechip').classList.remove('show');
+  $('#text').value=sampleCOI; run();
+});
+$('#go').addEventListener('click',run);
+$('#again').addEventListener('click',()=>{
+  $('#result').classList.remove('show');$('#input').style.display='';window.scrollTo({top:0,behavior:'smooth'});
+});
 
-        const data = await response.json();
+const stepMsgs=['Reading your certificate…','Extracting coverage & limits…','Checking endorsements…','Verifying expiration dates…','Writing your report…'];
+let stepTimer=null;
+function startSteps(){let i=0;$('#steps').textContent=stepMsgs[0];stepTimer=setInterval(()=>{i=(i+1)%stepMsgs.length;$('#steps').textContent=stepMsgs[i]},1800)}
+function stopSteps(){clearInterval(stepTimer)}
 
-        if (!response.ok) {
-          result.innerHTML = `<div class="border border-red-500/30 rounded-xl p-4 bg-red-500/5"><p class="text-red-400 text-sm">${data.error || 'Validation failed.'}</p></div>`;
-          result.classList.remove('hidden');
-          btn.disabled = false;
-          btnText.textContent = '▶ Run Validation';
-          return;
-        }
-
-        const v = data.validation || {};
-        const score = v.score ?? data.analysis?.overall_score ?? 0;
-        const gaps = v.gaps || [];
-        const reqsMet = v.requirements_met || {};
-        const policies = v.policies || [];
-
-        const scoreColor = score >= 80 ? 'green' : score >= 50 ? 'yellow' : 'red';
-        const statusText = score >= 80 ? 'Compliant' : score >= 50 ? 'Partially compliant' : 'Non-compliant';
-
-        let policiesHtml = '';
-        if (policies.length > 0) {
-          policiesHtml = `<div class="mt-4 pt-3 border-t border-white/5"><p class="text-xs text-gray-500 mb-2">Extracted Policies:</p><div class="space-y-1">${policies.map(p => `<div class="text-xs text-gray-400 flex items-center gap-2"><span class="text-indigo-400">${p.type || 'Policy'}</span>${p.policy_number ? `<span class="text-gray-600">${p.policy_number}</span>` : ''}${p.expiration ? `<span class="text-gray-600">Exp: ${p.expiration}</span>` : ''}</div>`).join('')}</div></div>`;
-        }
-
-        let reqsHtml = '';
-        const reqEntries = Object.entries(reqsMet);
-        if (reqEntries.length > 0) {
-          reqsHtml = `<div class="grid grid-cols-2 gap-2 text-xs">${reqEntries.map(([k, met]) => {
-            const label = k.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            return `<div class="flex items-center gap-1.5"><span class="${met ? 'text-green-400' : 'text-red-400'}">${met ? '✓' : '✗'}</span><span class="text-gray-500">${label}</span></div>`;
-          }).join('')}</div>`;
-        }
-
-        const demoNote = data.demo ? `<p class="text-indigo-400 text-xs mt-2">${data.message || 'Demo mode'}</p>` : '';
-
-        result.innerHTML = `
-          <div class="border border-white/5 rounded-xl p-4 bg-black/20 demo-result">
-            <div class="flex items-center gap-4 mb-4">
-              <div class="stat-ring border-4 border-${scoreColor}-500/50">
-                <span class="text-xl font-extrabold text-${scoreColor}-400">${score}</span>
-              </div>
-              <div>
-                <p class="font-semibold text-white">Compliance Score: ${score}/100</p>
-                <p class="text-${scoreColor}-400 text-xs">${statusText}${gaps.length ? ` — ${gaps.length} gap${gaps.length > 1 ? 's' : ''} found` : ''}</p>
-              </div>
-            </div>
-            ${gaps.length ? `<div class="space-y-1.5 mb-4">${gaps.map(g => `<div class="flex items-start gap-2 text-sm"><span class="text-red-400 shrink-0">✗</span><span class="text-gray-400">${g}</span></div>`).join('')}</div>` : '<p class="text-green-400 text-sm mb-4">All requirements met.</p>'}
-            ${reqsHtml}
-            ${policiesHtml}
-            <div class="mt-3 pt-3 border-t border-white/5 text-xs text-gray-600">
-              AI-validated · <a href="mailto:api@coivalidator.com?subject=API%20Access%20Request" class="text-indigo-400 hover:text-indigo-300">Get your API key →</a>
-            </div>
-            ${demoNote}
-          </div>
-        `;
-        result.classList.remove('hidden');
-      } catch (err) {
-        result.innerHTML = `<div class="border border-red-500/30 rounded-xl p-4 bg-red-500/5"><p class="text-red-400 text-sm">Network error. Please try again.</p></div>`;
-        result.classList.remove('hidden');
+async function run(){
+  hideErr();
+  if($('.chip.on').dataset.req==='__CUSTOM__') requirement=$('#customReq').value.trim();
+  let payload={requirements:requirement,today:new Date().toISOString().slice(0,10)};
+  try{
+    if(chosenFile){
+      if(chosenFile.type==='application/pdf'||/\.pdf$/i.test(chosenFile.name)){
+        const txt=await readPdf(chosenFile);
+        if(txt && txt.length>60){payload.text=txt}
+        else{payload.image=await toB64(chosenFile)} // scanned/image PDF → fall back to vision
+      }else{
+        payload.image=await toB64(chosenFile);
       }
-
-      btn.disabled = false;
-      btnText.textContent = '▶ Run Validation';
+    }else{
+      const t=$('#text').value.trim();
+      if(t.length<40){showErr('Add a certificate first — drop a file, snap a photo, or paste the text.');return}
+      payload.text=t;
     }
-  </script>
+  }catch(e){showErr('Could not read that file. Try a PDF or a clear photo.');return}
+
+  $('#input').style.display='none';$('#result').classList.remove('show');
+  $('#loading').classList.add('show');startSteps();
+  try{
+    const r=await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const d=await r.json();
+    if(!r.ok){throw new Error(d.error||'Analysis failed.')}
+    render(d);
+  }catch(e){
+    $('#loading').classList.remove('show');$('#input').style.display='';
+    showErr(e.message||'Something went wrong. Please try again.');
+  }finally{stopSteps()}
+}
+
+function classifyVerdict(d){
+  const v=(d.verdict||'').toLowerCase();
+  const fails=(d.checks||[]).filter(c=>!c.pass).length;
+  if(v.includes('non')||v.includes('reject')||v==='bad'||(d.overall_score!=null&&d.overall_score<50)) return 'bad';
+  if(v.includes('compliant')&&!v.includes('non')&&fails===0) return 'ok';
+  if(v==='unreadable') return 'warn';
+  return fails>0?'warn':'ok';
+}
+const esc=s=>(s==null?'':String(s)).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function render(d){
+  $('#loading').classList.remove('show');
+  const cls=classifyVerdict(d);
+  const vb=$('#verdict');vb.className='verdict '+cls;
+  $('#ring').textContent=(d.overall_score!=null?d.overall_score:'—');
+  $('#vtag').textContent=cls==='ok'?'Compliant':cls==='warn'?'Needs attention':'Not compliant';
+  $('#vhead').textContent=d.headline||d.summary||'';
+  // policies
+  const pb=$('#polBody');pb.innerHTML='';
+  (d.policies||[]).forEach(p=>{
+    const st=(p.status||'ok').toLowerCase();
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td><strong>${esc(p.type||'—')}</strong>${p.policy_number?`<div style="color:#8090aa;font-size:12px">#${esc(p.policy_number)}</div>`:''}</td>
+      <td>${esc(p.limits||'—')}</td><td>${esc(p.expiration||'—')}</td>
+      <td><span class="pill ${st}">${esc(st)}</span></td>`;
+    pb.appendChild(tr);
+  });
+  $('#policiesSec').style.display=(d.policies&&d.policies.length)?'':'none';
+  // checks
+  const ch=$('#checks');ch.innerHTML='';
+  (d.checks||[]).forEach(c=>{
+    const div=document.createElement('div');div.className='check '+(c.pass?'pass':'fail');
+    div.innerHTML=`<div class="mk">${c.pass?'✓':'✕'}</div><div><div class="cl">${esc(c.label)}</div>
+      ${c.found?`<div class="cf">On certificate: ${esc(c.found)}</div>`:''}
+      ${c.why?`<div class="cw">${esc(c.why)}</div>`:''}</div>`;
+    ch.appendChild(div);
+  });
+  $('#checksSec').style.display=(d.checks&&d.checks.length)?'':'none';
+  // risks
+  const rk=$('#risks');rk.innerHTML='';
+  (d.top_risks||[]).forEach(r=>{
+    const div=document.createElement('div');div.className='risk';
+    div.innerHTML=`<div class="ri">${esc(r.issue)}</div>${r.impact?`<div class="rp">${esc(r.impact)}</div>`:''}
+      ${r.fix?`<div class="rf"><strong>Fix:</strong> ${esc(r.fix)}</div>`:''}`;
+    rk.appendChild(div);
+  });
+  $('#risksSec').style.display=(d.top_risks&&d.top_risks.length)?'':'none';
+  // email
+  const em=(d.recommended_email||'').trim();
+  $('#emailBox').textContent=em;$('#emailSec').style.display=em?'':'none';
+  window._email=em;
+  $('#result').classList.add('show');
+  $('#result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+$('#copyEmail').addEventListener('click',()=>{
+  if(window._email){navigator.clipboard.writeText(window._email);$('#copyEmail').textContent='Copied ✓';setTimeout(()=>$('#copyEmail').textContent='Copy fix email',1500)}
+});
+$('#dl').addEventListener('click',()=>window.print());
+</script>
 </body>
 </html>
