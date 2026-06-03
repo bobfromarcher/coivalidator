@@ -68,7 +68,8 @@ Rules:
 - top_risks: at most 3, most dangerous first. Empty array if fully compliant.
 - Keep every explanation jargon-free enough for a 9-year-old, yet precise enough for a risk manager.`
 
-async function analyze(env, { text, image, requirements, today }) {
+async function analyze(env, { text, image, requirements, today, lang }) {
+  const langLine = lang === 'es' ? 'IMPORTANT: Write every text value in the JSON (headline, summary, why, issue, impact, fix, recommended_email, status, verdict explanations) in natural Latin-American Spanish.' : '';
   const base = env.FIREWORKS_BASE_URL || 'https://api.fireworks.ai/inference/v1'
   const textModel = env.FIREWORKS_MODEL || 'accounts/fireworks/models/deepseek-v4-pro'
   const visionModel = env.FIREWORKS_VISION_MODEL || 'accounts/fireworks/models/kimi-k2p6'
@@ -81,7 +82,7 @@ async function analyze(env, { text, image, requirements, today }) {
     // Photo/scan of a COI — read it directly with a vision model.
     model = visionModel
     userContent = [
-      { type: 'text', text: `Today's date is ${today}.\n\n${reqLine}\n\nThis is an image of a Certificate of Insurance. First read ALL text in the image, then analyze it and return the required JSON.` },
+      { type: 'text', text: `Today's date is ${today}.\n\n${reqLine}\n\nThis is an image of a Certificate of Insurance. First read ALL text in the image, then analyze it and return the required JSON.${langLine}` },
       { type: 'image_url', image_url: { url: image.startsWith('data:') ? image : `data:image/jpeg;base64,${image}` } },
     ]
   } else {
@@ -136,6 +137,7 @@ export default {
     const text = (body.text || '').toString()
     const image = (body.image || '').toString()
     const requirements = (body.requirements || '').toString()
+    const lang = (body.lang || 'en').toString()
     const today = (body.today || '').toString().match(/^\d{4}-\d{2}-\d{2}$/) ? body.today : new Date().toISOString().slice(0, 10)
 
     if (!image && text.trim().length < 40) {
@@ -147,7 +149,7 @@ export default {
     if (!env.FIREWORKS_API_KEY) return json({ error: 'Service not configured.' }, 503)
 
     try {
-      const result = await analyze(env, { text, image, requirements, today })
+      const result = await analyze(env, { text, image, requirements, today, lang })
       return json(result, 200)
     } catch (e) {
       return json({ error: 'Analysis failed. Please try again in a moment.', detail: String(e).slice(0, 180) }, 502)
