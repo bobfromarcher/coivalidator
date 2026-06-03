@@ -99,7 +99,7 @@ async function analyze(env, { text, image, requirements, today, lang }) {
       max_tokens: 4096,
       response_format: { type: 'json_object' },
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: SYSTEM_PROMPT + (lang === 'es' ? ' RESPONDE EN ESPANOL: every text value in the JSON must be written in natural Latin-American Spanish, not English.' : '') },
         { role: 'user', content: userContent },
       ],
     }),
